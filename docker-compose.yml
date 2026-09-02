@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: ./309a1
+      context: ./flynext
     container_name: travel-app
     ports:
       - "3000:3000"
