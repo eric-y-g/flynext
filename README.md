@@ -1,93 +1,148 @@
-# PP2
+# FlyNext
 
+FlyNext is a full-stack travel booking application for finding and booking flights and hotels in one place. Customers can build a combined itinerary, check out once, and manage their bookings, while hotel owners can publish and operate their properties.
 
+The application was built with Next.js, React, TypeScript, Prisma, PostgreSQL, and Tailwind CSS. Flight data and booking operations are provided by the Advanced Flights System (AFS), and Cloudinary stores uploaded hotel, room, and profile images.
 
-## Getting started
+## Features
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### For travellers
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- Register, sign in, update a profile, and upload a profile picture
+- Search one-way and round-trip flights by city, airport, and date
+- Browse hotels and find rooms available for selected dates
+- Add flights and hotel rooms to a shared cart
+- Check out a complete itinerary and receive an invoice
+- View or cancel existing flight and hotel bookings
+- Look up a flight booking by booking ID and passenger last name
+- Receive booking and cancellation notifications
+- Switch between light and dark themes
 
-## Add your files
+### For hotel owners
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+- Add hotels and upload property images
+- Define room types, amenities, nightly prices, and room images
+- Add individual rooms and control room availability
+- Review bookings for a property
+- Deactivate or restore rooms; affected guests are notified when applicable
 
+## Tech stack
+
+| Area | Technology |
+| --- | --- |
+| Web application | Next.js 15 App Router, React 19, TypeScript |
+| Styling | Tailwind CSS |
+| API | Next.js route handlers, Axios |
+| Database | PostgreSQL, Prisma ORM |
+| Authentication | JWT access/refresh tokens, bcrypt |
+| Flight integration | Advanced Flights System API |
+| Image storage | Cloudinary |
+| Deployment | Docker, Docker Compose |
+
+## Getting started with Docker
+
+### Prerequisites
+
+- Docker Desktop (or Docker Engine with Docker Compose)
+- An AFS API key for flight search and booking
+- A Cloudinary account if image uploads are required
+
+From the repository root, configure the environment values under the `app` service in `docker-compose.yml`, then start the application and PostgreSQL:
+
+```bash
+docker compose up --build -d
 ```
-cd existing_repo
-git remote add origin https://mcsscm.utm.utoronto.ca/csc309_20251/group_202/PP2.git
-git branch -M main
-git push -uf origin main
+
+Docker applies the Prisma migrations when the app container starts. Once both services are healthy, open [http://localhost:3000](http://localhost:3000).
+
+To populate the database with sample hotels, rooms, cities, and airports, run the optional seed script once:
+
+```bash
+docker compose exec app node seed.js
 ```
 
-## Integrate with your tools
+The seed script is not designed to be rerun against an already populated database. Stop the services with:
 
-- [ ] [Set up project integrations](https://mcsscm.utm.utoronto.ca/csc309_20251/group_202/PP2/-/settings/integrations)
+```bash
+docker compose down
+```
 
-## Collaborate with your team
+To also remove the PostgreSQL volume and all local application data, use `docker compose down -v`.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## Environment variables
 
-## Test and Deploy
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `DATABASE_URL` | Yes | PostgreSQL connection string used by Prisma |
+| `ACCESS_TOKEN_SECRET` | Yes | Signs short-lived access tokens |
+| `REFRESH_TOKEN_SECRET` | Yes | Signs refresh tokens |
+| `AFS_API_KEY` | Yes | Authenticates requests to the AFS flight API |
+| `CLOUDINARY_CLOUD_NAME` | For uploads | Cloudinary account name |
+| `CLOUDINARY_API_KEY` | For uploads | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | For uploads | Cloudinary API secret |
+| `NEXT_PUBLIC_BASE_URL` | Yes | Public origin used for server-side calls during checkout (for example, `http://localhost:3000`) |
+| `NEXT_PUBLIC_API_URL` | No | Overrides the browser API base URL; defaults to `/api` |
 
-Use the built-in continuous integration in GitLab.
+Use long, independent random values for both JWT secrets. Do not commit production credentials. Rotate any credentials that have previously been committed before deploying or sharing the repository.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## Local development without Docker
 
-***
+1. Start a PostgreSQL instance and create a database.
+2. In `flynext/`, create a local environment file containing the variables listed above.
+3. Install dependencies and prepare the database:
 
-# Editing this README
+   ```bash
+   cd flynext
+   npm install
+   npx prisma generate
+   npx prisma migrate deploy
+   ```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+4. Start the development server:
 
-## Suggestions for a good README
+   ```bash
+   npm run dev
+   ```
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+The site will be available at [http://localhost:3000](http://localhost:3000). If PostgreSQL is running through this repository's Compose configuration while the app runs on the host, connect to port `5433` rather than the container-only port `5432`.
 
-## Name
-Choose a self-explaining name for your project.
+## Useful commands
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Run these commands from `flynext/` unless noted otherwise.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```bash
+npm run dev       # Start the Next.js development server
+npm run build     # Create a production build
+npm run start     # Start a previously built production server
+npx prisma studio # Inspect local database records
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Project structure
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```text
+.
+├── docker-compose.yml       # App and PostgreSQL services
+├── README.md
+└── flynext/
+    ├── app/                 # Pages and API route handlers
+    ├── components/          # Shared interface components
+    ├── hooks/               # Authentication and theme hooks
+    ├── prisma/              # Database schema and migrations
+    ├── public/              # Static assets
+    ├── utils/               # API, authentication, and database helpers
+    ├── postman_collection.json
+    ├── seed.js              # Optional development data import
+    └── Dockerfile
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## API reference
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+The application exposes route handlers under `/api` for authentication, users, hotels, flights, carts, bookings, invoices, notifications, and image uploads. Import `flynext/postman_collection.json` into Postman for example requests and endpoint documentation.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Most account, cart, booking, hotel-management, notification, and invoice endpoints require an access token in the following header:
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+```http
+Authorization: Bearer <access-token>
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+The browser client stores the access token locally and sends the refresh-token cookie automatically.
