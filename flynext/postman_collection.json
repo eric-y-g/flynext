@@ -1,0 +1,3590 @@
+{
+	"info": {
+		"_postman_id": "29edea81-cece-460f-ad81-7805510bda28",
+		"name": "309_Postman_API Final",
+		"description": "This API collection provides endpoints for **user management, flight searching, hotel management, and booking services**. It enables users to **register, log in, manage their profiles, search for flights, manage hotels, and book or cancel room reservations**.\n\n**Setup Required:**  \nThis collection uses environment variables. Before running requests, please create an environment in Postman and assign it to the collection. The routes to add images may require the you to manually add an image yourself.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41589871"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Added check for response existence\r",
+									"if (pm.response.json().userId) {\r",
+									"    pm.environment.set(\"userId\", pm.response.json().userId);\r",
+									"    console.log(\"Access Token stored:\", pm.response.json().accessToken);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"john.doe@gmail.com\",\r\n    \"firstName\" : \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"phoneNumber\": \"1234567890\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "This route is used to register a new account. Returns the registered user's details."
+					},
+					"response": [
+						{
+							"name": "Register Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"john.doe@gmail.com\",\r\n    \"firstName\" : \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"phoneNumber\": \"1234567890\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/auth/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 03:26:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"userId\": \"cm7y7rnhr0000u7ik6y8knqmb\",\n    \"email\": \"john.doe@gmail.com\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"phoneNumber\": \"1234567890\",\n    \"profilePic\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response JSON\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"// Check if tokens exist in the response\r",
+									"if (response.accessToken) {\r",
+									"    pm.environment.set(\"accessToken\", response.accessToken);\r",
+									"    console.log(\"Access Token stored:\", response.accessToken);\r",
+									"}\r",
+									"\r",
+									"if (response.refreshToken) {\r",
+									"    pm.environment.set(\"refreshToken\", response.refreshToken);\r",
+									"    console.log(\"Refresh Token stored:\", response.refreshToken);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "660fd2753857f40781e914d56c15606bd4389995d302afb3147ed497def73da1",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"john.doe@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "This route is used to login a user. It will return the accessToken and refreshToken."
+					},
+					"response": [
+						{
+							"name": "Login Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-api-key",
+										"value": "660fd2753857f40781e914d56c15606bd4389995d302afb3147ed497def73da1",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"john.doe@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 03:27:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd5N3JuaHIwMDAwdTdpazZ5OGtucW1iIiwiZW1haWwiOiJqb2huLmRvZUBnbWFpbC5jb20iLCJpYXQiOjE3NDEzMTgwMzAsImV4cCI6MTc0MTMxODkzMH0.Umdsfi_ct4t5-7UkKsdqyZcNIi98ZcpCXhwYMXRpG28\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd5N3JuaHIwMDAwdTdpazZ5OGtucW1iIiwiZW1haWwiOiJqb2huLmRvZUBnbWFpbC5jb20iLCJpYXQiOjE3NDEzMTgwMzAsImV4cCI6MTc0MTkyMjgzMH0.aNDfYOc7vLGLS-zYZdLPvG8wDZNDafTJlXFdTV1bb50\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"if (response.accessToken) {\r",
+									"    pm.environment.set(\"accessToken\", response.accessToken);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd2YWQyM28wMDAwdTczNDUzOW5pbzA5IiwiZW1haWwiOiJzaGlyZW4ubHVAZ21haWwuY29tIiwiaWF0IjoxNzQxMTQxNTc0LCJleHAiOjE3NDExNDI0NzR9.m5Z1nMvqrb2UYuAUh9dRwtoHTkiWzlKah_Xv2RZaHdk",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"refreshToken\": \"{{refreshToken}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"refresh"
+							]
+						},
+						"description": "This route can be used when you have a valid refreshToken but your accessToken has expired. Upon recieving a valid refreshToken, it returns a new valid accessToken."
+					},
+					"response": [
+						{
+							"name": "Refresh Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd2YWQyM28wMDAwdTczNDUzOW5pbzA5IiwiZW1haWwiOiJzaGlyZW4ubHVAZ21haWwuY29tIiwiaWF0IjoxNzQxMTQxNTc0LCJleHAiOjE3NDExNDI0NzR9.m5Z1nMvqrb2UYuAUh9dRwtoHTkiWzlKah_Xv2RZaHdk",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"refreshToken\": \"\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/auth/refresh",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"refresh"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 03:35:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd5N3JuaHIwMDAwdTdpazZ5OGtucW1iIiwiZW1haWwiOiJqb2huLmRvZUBnbWFpbC5jb20iLCJpYXQiOjE3NDEzMTg1MTQsImV4cCI6MTc0MTMxOTQxNH0.grrWW689AtqSJBSaQ09GrRLnmFv_Pi0IJQNM2OyQaRg\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Here we have the requests on how to register an account. Login to recieve an access token and refresh token. As well a refresh path to aquire a new access token given an authentication token."
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "UserInfo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/auth/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						},
+						"description": "This request is used to obtain the info on the current user. Requires a valid accessToken as authorization."
+					},
+					"response": [
+						{
+							"name": "UserInfo Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/auth/me",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"me"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 03:36:45 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"userId\": \"cm7y7rnhr0000u7ik6y8knqmb\",\n    \"email\": \"john.doe@gmail.com\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"phoneNumber\": \"1234567890\",\n    \"profilePic\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "UserUpdate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Johnathan\",\r\n    \"lastName\": \"Deer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						},
+						"description": "This route is used to update a user with new information. Users can change their firstName, lastName, password, and email. At least one of the fields must be filled for an update, any fields not provided will not be provided. Requires a valid accessToken as authorization. Returns all the users information."
+					},
+					"response": [
+						{
+							"name": "UserUpdate Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Johnathan\",\r\n    \"lastName\": \"Deer\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/auth/me",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"me"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 03:37:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User updated successfully\",\n    \"user\": {\n        \"userId\": \"cm7y7rnhr0000u7ik6y8knqmb\",\n        \"email\": \"john.doe@gmail.com\",\n        \"firstName\": \"Johnathan\",\n        \"lastName\": \"Deer\",\n        \"phoneNumber\": \"1234567890\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "ProfilePicUpdate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "postman-cloud:///1effb09c-d79e-4550-84eb-759b43ad531b"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/profilepic",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"profilepic"
+							]
+						},
+						"description": "This route is used to add a profile picture to the users account. Requires a valid accessToken as authorization."
+					},
+					"response": []
+				}
+			],
+			"description": "Here contains methods for getting the user information. You must have the correct access token. We also have methods to update user information, you must have at least one field to update, a user can't change/update their email. Finally, we have a way to change/upload a profile picture for the user."
+		},
+		{
+			"name": "Hotels",
+			"item": [
+				{
+					"name": "Add Hotel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"if (response.hotelId) {\r",
+									"    pm.environment.set(\"hotelId\", response.hotelId);\r",
+									"}\r",
+									"if (response.ownerId) {\r",
+									"    pm.environment.set(\"ownerId\", response.ownerId);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Example\",\r\n    \"address\": \"example addr\",\r\n    \"location\": \"example loc\",\r\n    \"starRating\": 6\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/hotels/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels",
+								"add"
+							]
+						},
+						"description": "This route is used to add a hotel to a users account. Will return information about the newly created hotel. Requires a valid accessToken as authorization."
+					},
+					"response": [
+						{
+							"name": "Add Hotel",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer "
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Example\",\r\n    \"address\": \"example addr\",\r\n    \"location\": \"example loc\",\r\n    \"starRating\": 6\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/hotels/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels",
+										"add"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 03:59:02 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\n    \"name\": \"Example\",\n    \"address\": \"example addr\",\n    \"location\": \"example loc\",\n    \"starRating\": 6,\n    \"ownerId\": \"cm7y8pkg30004i0nsd0646kux\",\n    \"pictures\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Add Room Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"typeName\": \"example two\",\r\n    \"hotelId\": \"{{hotelId}}\",\r\n    \"amenities\": \"exampmle amenities\",\r\n    \"pricePerNight\": 250\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/hotels/type",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels",
+								"type"
+							]
+						},
+						"description": "This route is used to add a new room type. It must be associated with a specific hotelId. Returns information on the newly created room type. Requires a valid accessToken as authorization."
+					},
+					"response": [
+						{
+							"name": "Add Room Type",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer "
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"typeName\": \"example type\",\r\n    \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\r\n    \"amenities\": \"exampmle amenities\",\r\n    \"pricePerNight\": 10.99\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/hotels/type",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels",
+										"type"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 04:00:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"typeName\": \"example type\",\n    \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\n    \"amenities\": \"exampmle amenities\",\n    \"pricePerNight\": 10.99\n}"
+						}
+					]
+				},
+				{
+					"name": "Add Room",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"if (response.roomId) {\r",
+									"    pm.environment.set(\"roomId\", response.roomId);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roomNumber\": 2,\r\n    \"hotelId\": \"{{hotelId}}\",\r\n    \"typeName\": \"example two\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/hotels/rooms",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels",
+								"rooms"
+							]
+						},
+						"description": "This route is used to add a new room to a hotel. It must be associated with both a hotel and room type. Returns information about the newly created room. Requires a valid accessToken as authorization."
+					},
+					"response": [
+						{
+							"name": "Add Room",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer "
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roomNumber\": 1,\r\n    \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\r\n    \"typeName\": \"example type\"\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/hotels/rooms",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels",
+										"rooms"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 04:07:51 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"roomId\": \"cm7y98yya000ai0nsnwd9htuc\",\n    \"roomNumber\": 1,\n    \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\n    \"typeName\": \"example type\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Hotels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/hotels?checkInDate=2025-03-01T14:00:00.000Z&checkOutDate=2025-03-08T14:00:00.000Z&location=example loc&name=Example&starRating=6&priceRangeMax=500&priceRangeMin=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels"
+							],
+							"query": [
+								{
+									"key": "checkInDate",
+									"value": "2025-03-01T14:00:00.000Z"
+								},
+								{
+									"key": "checkOutDate",
+									"value": "2025-03-08T14:00:00.000Z"
+								},
+								{
+									"key": "location",
+									"value": "example loc"
+								},
+								{
+									"key": "name",
+									"value": "Example"
+								},
+								{
+									"key": "starRating",
+									"value": "6"
+								},
+								{
+									"key": "priceRangeMax",
+									"value": "500"
+								},
+								{
+									"key": "priceRangeMin",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This route is used to get information on all available hotels within the specified time period and at the location. Various other queries can be used to search for hotels. Returns a list of hotels that fit the criteria."
+					},
+					"response": [
+						{
+							"name": "Get Hotels",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/hotels?checkInDate=2025-03-10T14:00:00.000Z&checkOutDate=2025-03-16T14:00:00.000Z&location=example loc&name=Example&starRating=6&priceRangeMax=100&priceRangeMin=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels"
+									],
+									"query": [
+										{
+											"key": "checkInDate",
+											"value": "2025-03-10T14:00:00.000Z"
+										},
+										{
+											"key": "checkOutDate",
+											"value": "2025-03-16T14:00:00.000Z"
+										},
+										{
+											"key": "location",
+											"value": "example loc"
+										},
+										{
+											"key": "name",
+											"value": "Example"
+										},
+										{
+											"key": "starRating",
+											"value": "6"
+										},
+										{
+											"key": "priceRangeMax",
+											"value": "100"
+										},
+										{
+											"key": "priceRangeMin",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 04:08:36 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\n        \"name\": \"Example\",\n        \"address\": \"example addr\",\n        \"location\": \"example loc\",\n        \"starRating\": 6,\n        \"ownerId\": \"cm7y8pkg30004i0nsd0646kux\",\n        \"pictures\": null,\n        \"rooms\": [\n            {\n                \"roomId\": \"cm7y98yya000ai0nsnwd9htuc\",\n                \"roomNumber\": 1,\n                \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\n                \"typeName\": \"example type\"\n            }\n        ]\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Add Hotel Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/gaoyi/Desktop/Example1.png"
+								},
+								{
+									"key": "hotelId",
+									"value": "{{hotelId}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/hotels/add/image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels",
+								"add",
+								"image"
+							]
+						},
+						"description": "This route is used to add/associate an image to a hotel. It returns a success message on success. Requires a valid accessToken as authorization."
+					},
+					"response": [
+						{
+							"name": "Add Hotel Image",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer "
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/gaoyi/Desktop/Example1.png"
+										},
+										{
+											"key": "hotelId",
+											"value": "cm7y8xmdg0006i0ns2xaimdjf",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/hotels/add/image",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels",
+										"add",
+										"image"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 04:06:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Image sent successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Room By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/hotels/rooms/{{roomId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels",
+								"rooms",
+								"{{roomId}}"
+							]
+						},
+						"description": "This route is used to get information on a specific room via the roomID. It returns information on the room specified."
+					},
+					"response": [
+						{
+							"name": "Get Room By ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/hotels/rooms/cm7y98yya000ai0nsnwd9htuc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels",
+										"rooms",
+										"cm7y98yya000ai0nsnwd9htuc"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 04:14:29 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"roomId\": \"cm7y98yya000ai0nsnwd9htuc\",\n        \"roomNumber\": 1,\n        \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\n        \"typeName\": \"example type\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Add Room Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/gaoyi/Desktop/Example1.png"
+								},
+								{
+									"key": "typeName",
+									"value": "example type",
+									"type": "text"
+								},
+								{
+									"key": "hotelId",
+									"value": "{{hotelId}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/hotels/type/image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels",
+								"type",
+								"image"
+							]
+						},
+						"description": "This route is used to add an image to a specific room. It returns a success message on success. Requires a valid accessToken as authentication."
+					},
+					"response": [
+						{
+							"name": "Add Room Image",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer "
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/gaoyi/Desktop/Example1.png"
+										},
+										{
+											"key": "typeName",
+											"value": "example type",
+											"type": "text"
+										},
+										{
+											"key": "hotelId",
+											"value": "cm7y8xmdg0006i0ns2xaimdjf",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/hotels/type/image",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels",
+										"type",
+										"image"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 04:22:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successful roomTypeImage\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Hotel",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"new name\",\r\n    \"address\": \"new addr\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/hotels/{{hotelId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels",
+								"{{hotelId}}"
+							]
+						},
+						"description": "This route is used to update information on a hotel that has already been created. returns inofmration on the newly updated hotel. Requires a valid accessToken as authentication."
+					},
+					"response": [
+						{
+							"name": "Update Hotel",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer "
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"new name\",\r\n    \"address\": \"new addr\"\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/hotels/cm7y8xmdg0006i0ns2xaimdjf",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels",
+										"cm7y8xmdg0006i0ns2xaimdjf"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 04:13:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\n    \"name\": \"new name\",\n    \"address\": \"new addr\",\n    \"location\": \"example loc\",\n    \"starRating\": 6,\n    \"ownerId\": \"cm7y8pkg30004i0nsd0646kux\",\n    \"pictures\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Hotel By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/hotels/{{hotelId}}?checkInDate=2025-03-01T14:00:00.000Z&checkOutDate=2025-03-29T14:00:00.000Z",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels",
+								"{{hotelId}}"
+							],
+							"query": [
+								{
+									"key": "checkInDate",
+									"value": "2025-03-01T14:00:00.000Z"
+								},
+								{
+									"key": "checkOutDate",
+									"value": "2025-03-29T14:00:00.000Z"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Hotel By Id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/hotels/?checkInDate=2025-03-28T14:00:00.000Z&checkOutDate=2025-03-29T14:00:00.000Z",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels",
+										""
+									],
+									"query": [
+										{
+											"key": "checkInDate",
+											"value": "2025-03-28T14:00:00.000Z"
+										},
+										{
+											"key": "checkOutDate",
+											"value": "2025-03-29T14:00:00.000Z"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 08 Mar 2025 21:47:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"roomId\": \"cm80e2zeb0004i04cahl0jnif\",\n        \"roomNumber\": 1,\n        \"hotelId\": \"cm80e2jp60002i04cjcijxmtn\",\n        \"typeName\": \"example type\"\n    },\n    {\n        \"roomId\": \"cm80oeb4v000gi04c4qs85hq3\",\n        \"roomNumber\": 2,\n        \"hotelId\": \"cm80e2jp60002i04cjcijxmtn\",\n        \"typeName\": \"example two\"\n    }\n]"
+						}
+					]
+				}
+			],
+			"description": "These routes are for users to manipulate, add, and manage their hotels and their rooms."
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "CartFlight",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"if (response.flightTempId) {\r",
+									"    pm.environment.set(\"flightTempId\", response.flightTempId);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"flightId\": \"9383ba28-71a6-4493-8849-a5d0c5ae7802\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/cart/flight",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"cart",
+								"flight"
+							]
+						},
+						"description": "This route is used to add a request to the cart, it returns the cart item details upon success. Requires a valid accessToken for authorization."
+					},
+					"response": [
+						{
+							"name": "CartFlight",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"flightId\": \"9383ba28-71a6-4493-8849-a5d0c5ae7802\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/auth/cart/flight",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"cart",
+										"flight"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 09 Mar 2025 01:59:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"flightTempId\": \"cm80zk04z0002u72wuzpk5jbg\",\n    \"userId\": \"cm80zi6aq0000u72w80kipm06\",\n    \"flightId\": \"9383ba28-71a6-4493-8849-a5d0c5ae7802\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Checkout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"creditCardNumber\": \"1234567890123456\",\r\n    \"cvv\": \"1234\",\r\n    \"expiryDate\": \"2026-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/cart/checkout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"cart",
+								"checkout"
+							]
+						},
+						"description": "This route is used to validate a credit card's information. Requires a valid accessToken for authorization."
+					},
+					"response": [
+						{
+							"name": "Checkout Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"creditCardNumber\": \"1234567890123456\",\r\n    \"cvv\": \"1234\",\r\n    \"expiryDate\": \"2026-01-01\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/auth/cart/checkout",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"cart",
+										"checkout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 09 Mar 2025 02:11:22 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Credit card details are valid\"\n}"
+						}
+					]
+				},
+				{
+					"name": "GetFlightCart",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/auth/cart/flight",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"cart",
+								"flight"
+							]
+						},
+						"description": "This route returns all the flights the user currently has in their cart. Requires a valid accessToken for authorization."
+					},
+					"response": [
+						{
+							"name": "CartFlight Copy",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/auth/cart/flight",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"cart",
+										"flight"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 09 Mar 2025 02:00:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"flightTempId\": \"cm80zk04z0002u72wuzpk5jbg\",\n        \"userId\": \"cm80zi6aq0000u72w80kipm06\",\n        \"flightId\": \"9383ba28-71a6-4493-8849-a5d0c5ae7802\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "DeleteFlightCart",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/auth/cart/flight?flightTempId={{flightTempId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"cart",
+								"flight"
+							],
+							"query": [
+								{
+									"key": "flightTempId",
+									"value": "{{flightTempId}}"
+								}
+							]
+						},
+						"description": "This route deletes a specific item from their flight cart given the flight cart items id. Requires a valid accessToken for authorization."
+					},
+					"response": [
+						{
+							"name": "DeleteFlightCart Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/auth/cart/flight?flightTempId=",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"cart",
+										"flight"
+									],
+									"query": [
+										{
+											"key": "flightTempId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 09 Mar 2025 02:06:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Flight removed from cart\"\n}"
+						}
+					]
+				},
+				{
+					"name": "AddHotelCartItem",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"roomId\": \"{{roomId}}\",\r\n        \"checkInDate\": \"2025-03-11T14:00:00.000Z\",\r\n        \"checkOutDate\": \"2025-03-13T14:00:00.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/cart/hotel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"cart",
+								"hotel"
+							]
+						},
+						"description": "This route is used to add a hotel booking item to the users cart. Requires a valid accessToken to authenticate."
+					},
+					"response": [
+						{
+							"name": "AddHotelCartItem",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n        \"roomId\": \"cm80y21k1000ai0c07jkiw41d\",\r\n        \"checkInDate\": \"2025-03-11T14:00:00.000Z\",\r\n        \"checkOutDate\": \"2025-03-13T14:00:00.000Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/auth/cart/hotel",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"cart",
+										"hotel"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 09 Mar 2025 02:34:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Hotel booking added to cart\"\n}"
+						}
+					]
+				},
+				{
+					"name": "GetHotelCart",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/auth/cart/hotel?",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"cart",
+								"hotel"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null
+								}
+							]
+						},
+						"description": "This route is used to get all the hotel bookings that have been saved in the users cart. Requires a valid accessToken to authorize."
+					},
+					"response": [
+						{
+							"name": "GetHotelCart",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/auth/cart/hotel?",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"cart",
+										"hotel"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 09 Mar 2025 02:31:44 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"userId\": \"cm80y06ei0000i0c0qcz8f3qj\",\n        \"roomId\": \"cm80y0qrs0004i0c0n9phgxis\",\n        \"checkInDate\": \"2025-03-11T14:00:00.000Z\",\n        \"checkOutDate\": \"2025-03-13T14:00:00.000Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "DeleteHotelItem",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/auth/cart/hotel?roomId={{roomId}}&checkInDate=2025-03-11T14:00:00.000Z&checkOutDate=2025-03-13T14:00:00.000Z",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"cart",
+								"hotel"
+							],
+							"query": [
+								{
+									"key": "roomId",
+									"value": "{{roomId}}"
+								},
+								{
+									"key": "checkInDate",
+									"value": "2025-03-11T14:00:00.000Z"
+								},
+								{
+									"key": "checkOutDate",
+									"value": "2025-03-13T14:00:00.000Z"
+								}
+							]
+						},
+						"description": "This route is used to delete a hotel booking item from the users cart. Requires a valid accessToken to authenticate"
+					},
+					"response": [
+						{
+							"name": "DeleteHotelItem",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/auth/cart/hotel?roomId=cm80y24mt000ci0c0vxkjnajr&checkInDate=2025-03-11T14:00:00.000Z&checkOutDate=2025-03-13T14:00:00.000Z",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"auth",
+										"cart",
+										"hotel"
+									],
+									"query": [
+										{
+											"key": "roomId",
+											"value": "cm80y24mt000ci0c0vxkjnajr"
+										},
+										{
+											"key": "checkInDate",
+											"value": "2025-03-11T14:00:00.000Z"
+										},
+										{
+											"key": "checkOutDate",
+											"value": "2025-03-13T14:00:00.000Z"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 09 Mar 2025 02:28:31 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"HotelBooking removed from cart\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Here contains the routes that are used for adding/removing/checking items in the user's cart"
+		},
+		{
+			"name": "Booking",
+			"item": [
+				{
+					"name": "BookingFlight",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"if (response.booking) {\r",
+									"    if (response.booking.flightBookingId) {\r",
+									"        pm.environment.set(\"flightBookingId\", response.booking.flightBookingId);\r",
+									"    }\r",
+									"    if (response.booking.bookingReference) {\r",
+									"        pm.environment.set(\"bookingReference\", response.booking.bookingReference);\r",
+									"    }\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"passportNumber\": \"AR0123678\",\r\n    \"flightId\": \"9383ba28-71a6-4493-8849-a5d0c5ae7802\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/bookings/flight",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bookings",
+								"flight"
+							]
+						},
+						"description": "This route is used to book a flight. It returns barebones information on the bookings. Requires a valid accessToken as authentication."
+					},
+					"response": [
+						{
+							"name": "BookingFlight Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"passportNumber\": \"AR0123678\",\r\n    \"flightId\": \"9383ba28-71a6-4493-8849-a5d0c5ae7802\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/bookings/flight",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"bookings",
+										"flight"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 23:01:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Flight booked successfully\",\n    \"booking\": {\n        \"flightBookingId\": \"cm7zdqera0000u7s0r004j1mq\",\n        \"bookingReference\": \"8D4625\",\n        \"userId\": \"cm7y7rnhr0000u7ik6y8knqmb\",\n        \"lastName\": \"Deer\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "CheckingFlightBooking",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/bookings/flight?flightBookingId={{flightBookingId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bookings",
+								"flight"
+							],
+							"query": [
+								{
+									"key": "flightBookingId",
+									"value": "{{flightBookingId}}"
+								}
+							]
+						},
+						"description": "This route is used to check a flight booking. It returns detailed information on the booking."
+					},
+					"response": [
+						{
+							"name": "CheckingFlightBooking Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/bookings/flight?flightBookingId=cm7zdqera0000u7s0r004j1mq",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"bookings",
+										"flight"
+									],
+									"query": [
+										{
+											"key": "flightBookingId",
+											"value": "cm7zdqera0000u7s0r004j1mq"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 23:03:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"bookingDetails\": {\n        \"bookingReference\": \"8D4625\",\n        \"ticketNumber\": \"43a3e495b1\",\n        \"firstName\": \"Johnathan\",\n        \"lastName\": \"Deer\",\n        \"email\": \"john.doe@gmail.com\",\n        \"passportNumber\": \"AR0123678\",\n        \"status\": \"CONFIRMED\",\n        \"agencyId\": \"157a17e2-57c4-443e-973a-96acb455a645\",\n        \"createdAt\": \"2025-03-07T23:01:09.231Z\",\n        \"flights\": [\n            {\n                \"id\": \"9383ba28-71a6-4493-8849-a5d0c5ae7802\",\n                \"flightNumber\": \"MU1525\",\n                \"departureTime\": \"2024-11-18T12:40:00.000Z\",\n                \"arrivalTime\": \"2024-11-19T02:30:00.000Z\",\n                \"originId\": \"42fb9788-abab-4395-be2c-0ee891a161d6\",\n                \"destinationId\": \"2bcb7925-96aa-4de8-9ec1-3622e954c0b6\",\n                \"duration\": 830,\n                \"price\": 1123,\n                \"currency\": \"CAD\",\n                \"availableSeats\": 195,\n                \"status\": \"SCHEDULED\",\n                \"airline\": {\n                    \"code\": \"MU\",\n                    \"name\": \"China Eastern Airlines\"\n                },\n                \"origin\": {\n                    \"code\": \"PVG\",\n                    \"name\": \"Shanghai Pudong International Airport\",\n                    \"city\": \"Shanghai\",\n                    \"country\": \"China\"\n                },\n                \"destination\": {\n                    \"code\": \"ZRH\",\n                    \"name\": \"Zurich Airport\",\n                    \"city\": \"Zurich\",\n                    \"country\": \"Switzerland\"\n                }\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "HotelBooking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roomId\": \"{{roomId}}\",\r\n    \"checkInDate\": \"2025-03-01T14:00:00.000Z\",\r\n    \"checkOutDate\": \"2025-03-02T11:00:00.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/bookings/hotel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bookings",
+								"hotel"
+							]
+						},
+						"description": "This route is used to book a hotel room. It requires the desired room type and date of stay. Returns information on the booking. Requires a valid accessToken as authentication."
+					},
+					"response": [
+						{
+							"name": "HotelBooking",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer "
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roomId\": \"\",\r\n    \"checkInDate\": \"2025-03-01T14:00:00.000Z\",\r\n    \"checkOutDate\": \"2025-03-02T11:00:00.000Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/bookings/hotel",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"bookings",
+										"hotel"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 08 Mar 2025 22:00:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"userId\": \"cm80e2a610000i04c2ch35uu2\",\n    \"roomId\": \"cm80oeb4v000gi04c4qs85hq3\",\n    \"hotelId\": \"cm80e2jp60002i04cjcijxmtn\",\n    \"typeName\": \"example two\",\n    \"status\": \"reserved\",\n    \"price\": 250,\n    \"checkInDate\": \"2025-03-01T14:00:00.000Z\",\n    \"checkOutDate\": \"2025-03-02T11:00:00.000Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "DeleteHotelBooking",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"{{userId}}\",\r\n    \"roomId\": \"{{roomId}}\",\r\n    \"checkInDate\": \"2025-03-01T14:00:00.000Z\",\r\n    \"checkOutDate\": \"2025-03-02T11:00:00.000Z\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/bookings/hotel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bookings",
+								"hotel"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "DeleteHotelBooking Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer "
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"cm7y8pkg30004i0nsd0646kux\",\r\n    \"roomId\": \"cm7y98yya000ai0nsnwd9htuc\",\r\n    \"checkInDate\": \"2025-03-20T14:00:00.000Z\",\r\n    \"checkOutDate\": \"2025-03-25T11:00:00.000Z\"\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/bookings/hotel",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"bookings",
+										"hotel"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 04:16:00 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"userId\": \"cm7y8pkg30004i0nsd0646kux\",\n        \"roomId\": \"cm7y98yya000ai0nsnwd9htuc\",\n        \"checkInDate\": \"2025-03-20T14:00:00.000Z\",\n        \"checkOutDate\": \"2025-03-25T11:00:00.000Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "GetBookedHotelRooms",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/hotels/booked?hotelId={{hotelId}}&checkInDate=2025-03-01T14:00:00.000Z&checkOutDate=2025-03-30T14:00:00.000Z",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"hotels",
+								"booked"
+							],
+							"query": [
+								{
+									"key": "hotelId",
+									"value": "{{hotelId}}"
+								},
+								{
+									"key": "checkInDate",
+									"value": "2025-03-01T14:00:00.000Z"
+								},
+								{
+									"key": "checkOutDate",
+									"value": "2025-03-30T14:00:00.000Z"
+								},
+								{
+									"key": "roomType",
+									"value": "example type",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This route is used to get information on booked hotel rooms. Returns information on the hotel booking requested. Requires a valid accessToken as authentication."
+					},
+					"response": [
+						{
+							"name": "GetBookedHotelRooms Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer "
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/hotels/booked?hotelId=cm7y8xmdg0006i0ns2xaimdjf&checkInDate=2025-03-10T14:00:00.000Z&checkOutDate=2025-03-30T14:00:00.000Z&roomType=example type",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"hotels",
+										"booked"
+									],
+									"query": [
+										{
+											"key": "hotelId",
+											"value": "cm7y8xmdg0006i0ns2xaimdjf"
+										},
+										{
+											"key": "checkInDate",
+											"value": "2025-03-10T14:00:00.000Z"
+										},
+										{
+											"key": "checkOutDate",
+											"value": "2025-03-30T14:00:00.000Z"
+										},
+										{
+											"key": "roomType",
+											"value": "example type"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 18:56:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"userId\": \"cm7y8pkg30004i0nsd0646kux\",\n        \"roomId\": \"cm7y98yya000ai0nsnwd9htuc\",\n        \"hotelId\": \"cm7y8xmdg0006i0ns2xaimdjf\",\n        \"typeName\": \"example type\",\n        \"checkInDate\": \"2025-03-20T14:00:00.000Z\",\n        \"checkOutDate\": \"2025-03-25T11:00:00.000Z\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "GetAllBookings",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/bookings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"bookings"
+							]
+						},
+						"description": "This route is used to get all the bookings that a user has made. It returns a list containing information on all their bookings, hotel and flights. Requires a valid accessToken as authentication."
+					},
+					"response": [
+						{
+							"name": "GetAllBookings Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/bookings",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"bookings"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 23:20:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"flightBookings\": [\n        {\n            \"flightBookingId\": \"cm7zdqera0000u7s0r004j1mq\",\n            \"bookingReference\": \"8D4625\",\n            \"userId\": \"cm7y7rnhr0000u7ik6y8knqmb\",\n            \"lastName\": \"Deer\"\n        }\n    ],\n    \"hotelBooking\": []\n}"
+						}
+					]
+				}
+			],
+			"description": "This section contains all the routes used to book flights and hotels, as well as any routes to view your bookings."
+		},
+		{
+			"name": "Flights",
+			"item": [
+				{
+					"name": "SearchFlightOneWay",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/flights/search?origin=Toronto&destination=Zurich&date=2024-11-17&tripType=oneWay",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"flights",
+								"search"
+							],
+							"query": [
+								{
+									"key": "origin",
+									"value": "Toronto"
+								},
+								{
+									"key": "destination",
+									"value": "Zurich"
+								},
+								{
+									"key": "date",
+									"value": "2024-11-17"
+								},
+								{
+									"key": "tripType",
+									"value": "oneWay"
+								}
+							]
+						},
+						"description": "This route is used to find flights. It can be used for both oneWay flights and roundTrip flights. When used for oneWay, a there cannot be returnDate. It returns a list of all flights fitting the criteria."
+					},
+					"response": [
+						{
+							"name": "SearchFlightOneWay Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/flights/search?origin=Toronto&destination=Zurich&date=2024-11-17&tripType=oneWay",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"flights",
+										"search"
+									],
+									"query": [
+										{
+											"key": "origin",
+											"value": "Toronto"
+										},
+										{
+											"key": "destination",
+											"value": "Zurich"
+										},
+										{
+											"key": "date",
+											"value": "2024-11-17"
+										},
+										{
+											"key": "tripType",
+											"value": "oneWay"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 22:47:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"outboundFlights\": [\n        {\n            \"id\": \"bd7ee4df-004d-4c95-abda-633d276a5842\",\n            \"flightNumber\": \"AC8762\",\n            \"departureTime\": \"2024-11-17T14:50:00.000Z\",\n            \"arrivalTime\": \"2024-11-18T02:00:00.000Z\",\n            \"originId\": \"370d2633-ba94-47f5-a735-513c0e332224\",\n            \"destinationId\": \"2bcb7925-96aa-4de8-9ec1-3622e954c0b6\",\n            \"duration\": 670,\n            \"price\": 1744,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 0,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"AC\",\n                \"name\": \"Air Canada\"\n            },\n            \"origin\": {\n                \"code\": \"YYZ\",\n                \"name\": \"Toronto Pearson International Airport\",\n                \"city\": \"Toronto\",\n                \"country\": \"Canada\"\n            },\n            \"destination\": {\n                \"code\": \"ZRH\",\n                \"name\": \"Zurich Airport\",\n                \"city\": \"Zurich\",\n                \"country\": \"Switzerland\"\n            }\n        },\n        {\n            \"id\": \"ee372818-cd33-4886-9088-d601947777a2\",\n            \"flightNumber\": \"AC7719\",\n            \"departureTime\": \"2024-11-17T20:30:00.000Z\",\n            \"arrivalTime\": \"2024-11-18T06:20:00.000Z\",\n            \"originId\": \"370d2633-ba94-47f5-a735-513c0e332224\",\n            \"destinationId\": \"42fb9788-abab-4395-be2c-0ee891a161d6\",\n            \"duration\": 590,\n            \"price\": 1765,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 54,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"AC\",\n                \"name\": \"Air Canada\"\n            },\n            \"origin\": {\n                \"code\": \"YYZ\",\n                \"name\": \"Toronto Pearson International Airport\",\n                \"city\": \"Toronto\",\n                \"country\": \"Canada\"\n            },\n            \"destination\": {\n                \"code\": \"PVG\",\n                \"name\": \"Shanghai Pudong International Airport\",\n                \"city\": \"Shanghai\",\n                \"country\": \"China\"\n            }\n        },\n        {\n            \"id\": \"9383ba28-71a6-4493-8849-a5d0c5ae7802\",\n            \"flightNumber\": \"MU1525\",\n            \"departureTime\": \"2024-11-18T12:40:00.000Z\",\n            \"arrivalTime\": \"2024-11-19T02:30:00.000Z\",\n            \"originId\": \"42fb9788-abab-4395-be2c-0ee891a161d6\",\n            \"destinationId\": \"2bcb7925-96aa-4de8-9ec1-3622e954c0b6\",\n            \"duration\": 830,\n            \"price\": 1123,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 196,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"MU\",\n                \"name\": \"China Eastern Airlines\"\n            },\n            \"origin\": {\n                \"code\": \"PVG\",\n                \"name\": \"Shanghai Pudong International Airport\",\n                \"city\": \"Shanghai\",\n                \"country\": \"China\"\n            },\n            \"destination\": {\n                \"code\": \"ZRH\",\n                \"name\": \"Zurich Airport\",\n                \"city\": \"Zurich\",\n                \"country\": \"Switzerland\"\n            }\n        }\n    ],\n    \"inboundFlights\": []\n}"
+						}
+					]
+				},
+				{
+					"name": "SearchFlightRoundTrip",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/flights/search?origin=Toronto&destination=Zurich&date=2024-11-17&tripType=roundTrip&returnDate=2024-11-18",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"flights",
+								"search"
+							],
+							"query": [
+								{
+									"key": "origin",
+									"value": "Toronto"
+								},
+								{
+									"key": "destination",
+									"value": "Zurich"
+								},
+								{
+									"key": "date",
+									"value": "2024-11-17"
+								},
+								{
+									"key": "tripType",
+									"value": "roundTrip"
+								},
+								{
+									"key": "returnDate",
+									"value": "2024-11-18"
+								}
+							]
+						},
+						"description": "This route is used to find flights. It can be used for both oneWay flights and roundTrip flights. When used for roundTrip, a must be specified returnDate. It returns a list of all flights fitting the criteria."
+					},
+					"response": [
+						{
+							"name": "SearchFlightRoundTrip Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/flights/search?origin=Toronto&destination=Zurich&date=2024-11-17&tripType=roundTrip&returnDate=2024-11-18",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"flights",
+										"search"
+									],
+									"query": [
+										{
+											"key": "origin",
+											"value": "Toronto"
+										},
+										{
+											"key": "destination",
+											"value": "Zurich"
+										},
+										{
+											"key": "date",
+											"value": "2024-11-17"
+										},
+										{
+											"key": "tripType",
+											"value": "roundTrip"
+										},
+										{
+											"key": "returnDate",
+											"value": "2024-11-18"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 07 Mar 2025 22:47:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"outboundFlights\": [\n        {\n            \"id\": \"bd7ee4df-004d-4c95-abda-633d276a5842\",\n            \"flightNumber\": \"AC8762\",\n            \"departureTime\": \"2024-11-17T14:50:00.000Z\",\n            \"arrivalTime\": \"2024-11-18T02:00:00.000Z\",\n            \"originId\": \"370d2633-ba94-47f5-a735-513c0e332224\",\n            \"destinationId\": \"2bcb7925-96aa-4de8-9ec1-3622e954c0b6\",\n            \"duration\": 670,\n            \"price\": 1744,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 0,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"AC\",\n                \"name\": \"Air Canada\"\n            },\n            \"origin\": {\n                \"code\": \"YYZ\",\n                \"name\": \"Toronto Pearson International Airport\",\n                \"city\": \"Toronto\",\n                \"country\": \"Canada\"\n            },\n            \"destination\": {\n                \"code\": \"ZRH\",\n                \"name\": \"Zurich Airport\",\n                \"city\": \"Zurich\",\n                \"country\": \"Switzerland\"\n            }\n        },\n        {\n            \"id\": \"ee372818-cd33-4886-9088-d601947777a2\",\n            \"flightNumber\": \"AC7719\",\n            \"departureTime\": \"2024-11-17T20:30:00.000Z\",\n            \"arrivalTime\": \"2024-11-18T06:20:00.000Z\",\n            \"originId\": \"370d2633-ba94-47f5-a735-513c0e332224\",\n            \"destinationId\": \"42fb9788-abab-4395-be2c-0ee891a161d6\",\n            \"duration\": 590,\n            \"price\": 1765,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 54,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"AC\",\n                \"name\": \"Air Canada\"\n            },\n            \"origin\": {\n                \"code\": \"YYZ\",\n                \"name\": \"Toronto Pearson International Airport\",\n                \"city\": \"Toronto\",\n                \"country\": \"Canada\"\n            },\n            \"destination\": {\n                \"code\": \"PVG\",\n                \"name\": \"Shanghai Pudong International Airport\",\n                \"city\": \"Shanghai\",\n                \"country\": \"China\"\n            }\n        },\n        {\n            \"id\": \"9383ba28-71a6-4493-8849-a5d0c5ae7802\",\n            \"flightNumber\": \"MU1525\",\n            \"departureTime\": \"2024-11-18T12:40:00.000Z\",\n            \"arrivalTime\": \"2024-11-19T02:30:00.000Z\",\n            \"originId\": \"42fb9788-abab-4395-be2c-0ee891a161d6\",\n            \"destinationId\": \"2bcb7925-96aa-4de8-9ec1-3622e954c0b6\",\n            \"duration\": 830,\n            \"price\": 1123,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 196,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"MU\",\n                \"name\": \"China Eastern Airlines\"\n            },\n            \"origin\": {\n                \"code\": \"PVG\",\n                \"name\": \"Shanghai Pudong International Airport\",\n                \"city\": \"Shanghai\",\n                \"country\": \"China\"\n            },\n            \"destination\": {\n                \"code\": \"ZRH\",\n                \"name\": \"Zurich Airport\",\n                \"city\": \"Zurich\",\n                \"country\": \"Switzerland\"\n            }\n        }\n    ],\n    \"inboundFlights\": [\n        {\n            \"id\": \"20b185f3-f801-4226-b1ef-c59b74b6b97c\",\n            \"flightNumber\": \"LX512\",\n            \"departureTime\": \"2024-11-18T05:45:00.000Z\",\n            \"arrivalTime\": \"2024-11-18T16:40:00.000Z\",\n            \"originId\": \"2bcb7925-96aa-4de8-9ec1-3622e954c0b6\",\n            \"destinationId\": \"9b89762a-74d8-4389-915f-ce55daba1c48\",\n            \"duration\": 655,\n            \"price\": 339,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 129,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"LX\",\n                \"name\": \"Swiss International Air Lines\"\n            },\n            \"origin\": {\n                \"code\": \"ZRH\",\n                \"name\": \"Zurich Airport\",\n                \"city\": \"Zurich\",\n                \"country\": \"Switzerland\"\n            },\n            \"destination\": {\n                \"code\": \"CMB\",\n                \"name\": \"Bandaranaike International Airport\",\n                \"city\": \"Colombo\",\n                \"country\": \"Sri Lanka\"\n            }\n        },\n        {\n            \"id\": \"ff89b041-d78a-40fc-9861-929a4fefa99b\",\n            \"flightNumber\": \"UL9494\",\n            \"departureTime\": \"2024-11-19T17:40:00.000Z\",\n            \"arrivalTime\": \"2024-11-20T07:00:00.000Z\",\n            \"originId\": \"9b89762a-74d8-4389-915f-ce55daba1c48\",\n            \"destinationId\": \"370d2633-ba94-47f5-a735-513c0e332224\",\n            \"duration\": 800,\n            \"price\": 826,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 243,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"UL\",\n                \"name\": \"SriLankan Airlines\"\n            },\n            \"origin\": {\n                \"code\": \"CMB\",\n                \"name\": \"Bandaranaike International Airport\",\n                \"city\": \"Colombo\",\n                \"country\": \"Sri Lanka\"\n            },\n            \"destination\": {\n                \"code\": \"YYZ\",\n                \"name\": \"Toronto Pearson International Airport\",\n                \"city\": \"Toronto\",\n                \"country\": \"Canada\"\n            }\n        },\n        {\n            \"id\": \"20b185f3-f801-4226-b1ef-c59b74b6b97c\",\n            \"flightNumber\": \"LX512\",\n            \"departureTime\": \"2024-11-18T05:45:00.000Z\",\n            \"arrivalTime\": \"2024-11-18T16:40:00.000Z\",\n            \"originId\": \"2bcb7925-96aa-4de8-9ec1-3622e954c0b6\",\n            \"destinationId\": \"9b89762a-74d8-4389-915f-ce55daba1c48\",\n            \"duration\": 655,\n            \"price\": 339,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 129,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"LX\",\n                \"name\": \"Swiss International Air Lines\"\n            },\n            \"origin\": {\n                \"code\": \"ZRH\",\n                \"name\": \"Zurich Airport\",\n                \"city\": \"Zurich\",\n                \"country\": \"Switzerland\"\n            },\n            \"destination\": {\n                \"code\": \"CMB\",\n                \"name\": \"Bandaranaike International Airport\",\n                \"city\": \"Colombo\",\n                \"country\": \"Sri Lanka\"\n            }\n        },\n        {\n            \"id\": \"2bb03113-4b88-46aa-bd4e-a79b53b6e975\",\n            \"flightNumber\": \"UL2975\",\n            \"departureTime\": \"2024-11-18T19:55:00.000Z\",\n            \"arrivalTime\": \"2024-11-19T02:05:00.000Z\",\n            \"originId\": \"9b89762a-74d8-4389-915f-ce55daba1c48\",\n            \"destinationId\": \"b4183787-d9e7-4c29-939d-1cc1cfc72b19\",\n            \"duration\": 370,\n            \"price\": 804,\n            \"currency\": \"CAD\",\n            \"availableSeats\": 175,\n            \"status\": \"SCHEDULED\",\n            \"airline\": {\n                \"code\": \"UL\",\n                \"name\": \"SriLankan Airlines\"\n            },\n            \"origin\": {\n                \"code\": \"CMB\",\n                \"name\": \"Bandaranaike International Airport\",\n                \"city\": \"Colombo\",\n                \"country\": \"Sri Lanka\"\n            },\n            \"destination\": {\n                \"code\": \"YTZ\",\n                \"name\": \"Billy Bishop Toronto City Airport\",\n                \"city\": \"Toronto\",\n                \"country\": \"Canada\"\n            }\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "GetNotifications",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"\r",
+									"// Check if notifications exist\r",
+									"if (Array.isArray(response) && response.length > 0) {\r",
+									"    var firstNotificationId = response[0].notificationId;\r",
+									"    pm.environment.set(\"firstNotificationId\", firstNotificationId);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/notification",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"notification"
+							]
+						},
+						"description": "This route is used to get information on all a user's notifications. Requires a valid accessToken for authentication."
+					},
+					"response": [
+						{
+							"name": "GetNotifications Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/notification",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"notification"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 08 Mar 2025 02:22:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"notificationId\": \"cm7zjk75x0007u7ysl849pefp\",\n        \"userId\": \"cm7zjjiwn0000u7ysqt4fvatn\",\n        \"message\": \"Your flight with booking reference 541C70 has been successfully booked.\"\n    },\n    {\n        \"notificationId\": \"cm7zjkamr0009u7ys6tec5spd\",\n        \"userId\": \"cm7zjjiwn0000u7ysqt4fvatn\",\n        \"message\": \"Someone has booked your hotel.\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "DeleteNotification",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/notification?notificationId={{firstNotificationId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"notification"
+							],
+							"query": [
+								{
+									"key": "notificationId",
+									"value": "{{firstNotificationId}}"
+								}
+							]
+						},
+						"description": "This route is used to delete a user's notification. Requires a valid accessToken for authentication."
+					},
+					"response": [
+						{
+							"name": "DeleteNotification",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:3000/api/notification?notificationId=cm7zjk75x0007u7ysl849pefp",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"notification"
+									],
+									"query": [
+										{
+											"key": "notificationId",
+											"value": "cm7zjk75x0007u7ysl849pefp"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "vary",
+									"value": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 08 Mar 2025 02:30:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Notification deleted successfully\"\n}"
+						}
+					]
+				}
+			],
+			"description": "This folder contains the methods regarding notifications."
+		}
+	]
+}

@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.env.local
+.git
+.gitignore
+.vscode
+*.tsbuildinfo
+docs.pdf
+postman_collection.json
+collection.openai

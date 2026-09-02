@@ -1,0 +1,2989 @@
+openapi: 3.0.3
+info:
+  title: 309_Postman_API Final
+  description: >-
+    This API collection provides endpoints for **user management, flight
+    searching, hotel management, and booking services**. It enables users to
+    **register, log in, manage their profiles, search for flights, manage
+    hotels, and book or cancel room reservations**.
+
+
+    **Setup Required:**  
+
+    This collection uses environment variables. Before running requests, please
+    create an environment in Postman and assign it to the collection. The routes
+    to add images may require the you to manually add an image yourself.
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: http://localhost
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register
+      description: >-
+        This route is used to register a new account. Returns the registered
+        user's details.
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: john.doe@gmail.com
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                password:
+                  type: string
+                  example: password
+                phoneNumber:
+                  type: string
+                  example: '1234567890'
+            examples:
+              Register:
+                value:
+                  email: john.doe@gmail.com
+                  firstName: John
+                  lastName: Doe
+                  password: password
+                  phoneNumber: '1234567890'
+      responses:
+        '200':
+          description: Register Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 03:26:24 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: john.doe@gmail.com
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: Doe
+                  phoneNumber:
+                    type: string
+                    example: '1234567890'
+                  profilePic:
+                    nullable: true
+                    example: null
+                  userId:
+                    type: string
+                    example: cm7y7rnhr0000u7ik6y8knqmb
+              examples:
+                Register Response:
+                  value:
+                    email: john.doe@gmail.com
+                    firstName: John
+                    lastName: Doe
+                    phoneNumber: '1234567890'
+                    profilePic: null
+                    userId: cm7y7rnhr0000u7ik6y8knqmb
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login
+      description: >-
+        This route is used to login a user. It will return the accessToken and
+        refreshToken.
+      operationId: login
+      parameters:
+        - name: x-api-key
+          in: header
+          schema:
+            type: string
+            example: 660fd2753857f40781e914d56c15606bd4389995d302afb3147ed497def73da1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: john.doe@gmail.com
+                password:
+                  type: string
+                  example: password
+            examples:
+              Login:
+                value:
+                  email: john.doe@gmail.com
+                  password: password
+      responses:
+        '200':
+          description: Login Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 03:27:10 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: >-
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd5N3JuaHIwMDAwdTdpazZ5OGtucW1iIiwiZW1haWwiOiJqb2huLmRvZUBnbWFpbC5jb20iLCJpYXQiOjE3NDEzMTgwMzAsImV4cCI6MTc0MTMxODkzMH0.Umdsfi_ct4t5-7UkKsdqyZcNIi98ZcpCXhwYMXRpG28
+                  refreshToken:
+                    type: string
+                    example: >-
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd5N3JuaHIwMDAwdTdpazZ5OGtucW1iIiwiZW1haWwiOiJqb2huLmRvZUBnbWFpbC5jb20iLCJpYXQiOjE3NDEzMTgwMzAsImV4cCI6MTc0MTkyMjgzMH0.aNDfYOc7vLGLS-zYZdLPvG8wDZNDafTJlXFdTV1bb50
+              examples:
+                Login Response:
+                  value:
+                    accessToken: >-
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd5N3JuaHIwMDAwdTdpazZ5OGtucW1iIiwiZW1haWwiOiJqb2huLmRvZUBnbWFpbC5jb20iLCJpYXQiOjE3NDEzMTgwMzAsImV4cCI6MTc0MTMxODkzMH0.Umdsfi_ct4t5-7UkKsdqyZcNIi98ZcpCXhwYMXRpG28
+                    refreshToken: >-
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd5N3JuaHIwMDAwdTdpazZ5OGtucW1iIiwiZW1haWwiOiJqb2huLmRvZUBnbWFpbC5jb20iLCJpYXQiOjE3NDEzMTgwMzAsImV4cCI6MTc0MTkyMjgzMH0.aNDfYOc7vLGLS-zYZdLPvG8wDZNDafTJlXFdTV1bb50
+  /api/auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh
+      description: >-
+        This route can be used when you have a valid refreshToken but your
+        accessToken has expired. Upon recieving a valid refreshToken, it returns
+        a new valid accessToken.
+      operationId: refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  example: ''
+            examples:
+              Refresh:
+                value:
+                  refreshToken: ''
+      responses:
+        '200':
+          description: Refresh Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 03:35:14 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: >-
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd5N3JuaHIwMDAwdTdpazZ5OGtucW1iIiwiZW1haWwiOiJqb2huLmRvZUBnbWFpbC5jb20iLCJpYXQiOjE3NDEzMTg1MTQsImV4cCI6MTc0MTMxOTQxNH0.grrWW689AtqSJBSaQ09GrRLnmFv_Pi0IJQNM2OyQaRg
+              examples:
+                Refresh Response:
+                  value:
+                    accessToken: >-
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTd5N3JuaHIwMDAwdTdpazZ5OGtucW1iIiwiZW1haWwiOiJqb2huLmRvZUBnbWFpbC5jb20iLCJpYXQiOjE3NDEzMTg1MTQsImV4cCI6MTc0MTMxOTQxNH0.grrWW689AtqSJBSaQ09GrRLnmFv_Pi0IJQNM2OyQaRg
+      security:
+        - {}
+  /api/auth/me:
+    get:
+      tags:
+        - User
+      summary: UserInfo
+      description: >-
+        This request is used to obtain the info on the current user. Requires a
+        valid accessToken as authorization.
+      operationId: userinfo
+      responses:
+        '200':
+          description: UserInfo Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 03:36:45 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: john.doe@gmail.com
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: Doe
+                  phoneNumber:
+                    type: string
+                    example: '1234567890'
+                  profilePic:
+                    nullable: true
+                    example: null
+                  userId:
+                    type: string
+                    example: cm7y7rnhr0000u7ik6y8knqmb
+              examples:
+                UserInfo Response:
+                  value:
+                    email: john.doe@gmail.com
+                    firstName: John
+                    lastName: Doe
+                    phoneNumber: '1234567890'
+                    profilePic: null
+                    userId: cm7y7rnhr0000u7ik6y8knqmb
+      security:
+        - {}
+    post:
+      tags:
+        - User
+      summary: UserUpdate
+      description: >-
+        This route is used to update a user with new information. Users can
+        change their firstName, lastName, password, and email. At least one of
+        the fields must be filled for an update, any fields not provided will
+        not be provided. Requires a valid accessToken as authorization. Returns
+        all the users information.
+      operationId: userupdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: Johnathan
+                lastName:
+                  type: string
+                  example: Deer
+            examples:
+              UserUpdate:
+                value:
+                  firstName: Johnathan
+                  lastName: Deer
+      responses:
+        '200':
+          description: UserUpdate Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 03:37:57 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User updated successfully
+                  user:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        example: john.doe@gmail.com
+                      firstName:
+                        type: string
+                        example: Johnathan
+                      lastName:
+                        type: string
+                        example: Deer
+                      phoneNumber:
+                        type: string
+                        example: '1234567890'
+                      userId:
+                        type: string
+                        example: cm7y7rnhr0000u7ik6y8knqmb
+              examples:
+                UserUpdate Response:
+                  value:
+                    message: User updated successfully
+                    user:
+                      email: john.doe@gmail.com
+                      firstName: Johnathan
+                      lastName: Deer
+                      phoneNumber: '1234567890'
+                      userId: cm7y7rnhr0000u7ik6y8knqmb
+      security:
+        - {}
+  /api/auth/profilepic:
+    post:
+      tags:
+        - User
+      summary: ProfilePicUpdate
+      description: >-
+        This route is used to add a profile picture to the users account.
+        Requires a valid accessToken as authorization.
+      operationId: profilepicupdate
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: ''
+      security:
+        - {}
+  /api/hotels/add:
+    post:
+      tags:
+        - Hotels
+      summary: Add Hotel
+      description: >-
+        This route is used to add a hotel to a users account. Will return
+        information about the newly created hotel. Requires a valid accessToken
+        as authorization.
+      operationId: addHotel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: example addr
+                location:
+                  type: string
+                  example: example loc
+                name:
+                  type: string
+                  example: Example
+                starRating:
+                  type: number
+                  example: 6
+            examples:
+              Add Hotel:
+                value:
+                  address: example addr
+                  location: example loc
+                  name: Example
+                  starRating: 6
+      responses:
+        '200':
+          description: Add Hotel
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 03:59:02 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address:
+                    type: string
+                    example: example addr
+                  hotelId:
+                    type: string
+                    example: cm7y8xmdg0006i0ns2xaimdjf
+                  location:
+                    type: string
+                    example: example loc
+                  name:
+                    type: string
+                    example: Example
+                  ownerId:
+                    type: string
+                    example: cm7y8pkg30004i0nsd0646kux
+                  pictures:
+                    nullable: true
+                    example: null
+                  starRating:
+                    type: number
+                    example: 6
+              examples:
+                Add Hotel:
+                  value:
+                    address: example addr
+                    hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                    location: example loc
+                    name: Example
+                    ownerId: cm7y8pkg30004i0nsd0646kux
+                    pictures: null
+                    starRating: 6
+  /api/hotels/type:
+    post:
+      tags:
+        - Hotels
+      summary: Add Room Type
+      description: >-
+        This route is used to add a new room type. It must be associated with a
+        specific hotelId. Returns information on the newly created room type.
+        Requires a valid accessToken as authorization.
+      operationId: addRoomType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amenities:
+                  type: string
+                  example: exampmle amenities
+                hotelId:
+                  type: string
+                  example: cm7y8xmdg0006i0ns2xaimdjf
+                pricePerNight:
+                  type: number
+                  example: 10.99
+                typeName:
+                  type: string
+                  example: example type
+            examples:
+              Add Room Type:
+                value:
+                  amenities: exampmle amenities
+                  hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                  pricePerNight: 10.99
+                  typeName: example type
+      responses:
+        '200':
+          description: Add Room Type
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 04:00:48 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  amenities:
+                    type: string
+                    example: exampmle amenities
+                  hotelId:
+                    type: string
+                    example: cm7y8xmdg0006i0ns2xaimdjf
+                  pricePerNight:
+                    type: number
+                    example: 10.99
+                  typeName:
+                    type: string
+                    example: example type
+              examples:
+                Add Room Type:
+                  value:
+                    amenities: exampmle amenities
+                    hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                    pricePerNight: 10.99
+                    typeName: example type
+  /api/hotels/rooms:
+    post:
+      tags:
+        - Hotels
+      summary: Add Room
+      description: >-
+        This route is used to add a new room to a hotel. It must be associated
+        with both a hotel and room type. Returns information about the newly
+        created room. Requires a valid accessToken as authorization.
+      operationId: addRoom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                hotelId:
+                  type: string
+                  example: cm7y8xmdg0006i0ns2xaimdjf
+                roomNumber:
+                  type: number
+                  example: 1
+                typeName:
+                  type: string
+                  example: example type
+            examples:
+              Add Room:
+                value:
+                  hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                  roomNumber: 1
+                  typeName: example type
+      responses:
+        '200':
+          description: Add Room
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 04:07:51 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hotelId:
+                    type: string
+                    example: cm7y8xmdg0006i0ns2xaimdjf
+                  roomId:
+                    type: string
+                    example: cm7y98yya000ai0nsnwd9htuc
+                  roomNumber:
+                    type: number
+                    example: 1
+                  typeName:
+                    type: string
+                    example: example type
+              examples:
+                Add Room:
+                  value:
+                    hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                    roomId: cm7y98yya000ai0nsnwd9htuc
+                    roomNumber: 1
+                    typeName: example type
+  /api/hotels:
+    get:
+      tags:
+        - Hotels
+      summary: Get Hotels
+      description: >-
+        This route is used to get information on all available hotels within the
+        specified time period and at the location. Various other queries can be
+        used to search for hotels. Returns a list of hotels that fit the
+        criteria.
+      operationId: getHotels
+      parameters:
+        - name: checkInDate
+          in: query
+          schema:
+            type: string
+            example: '2025-03-01T14:00:00.000Z'
+        - name: checkOutDate
+          in: query
+          schema:
+            type: string
+            example: '2025-03-08T14:00:00.000Z'
+        - name: location
+          in: query
+          schema:
+            type: string
+            example: example loc
+        - name: name
+          in: query
+          schema:
+            type: string
+            example: Example
+        - name: starRating
+          in: query
+          schema:
+            type: string
+            example: '6'
+        - name: priceRangeMax
+          in: query
+          schema:
+            type: string
+            example: '500'
+        - name: priceRangeMin
+          in: query
+          schema:
+            type: string
+            example: '1'
+      responses:
+        '200':
+          description: Get Hotels
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 04:08:36 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                      example: example addr
+                    hotelId:
+                      type: string
+                      example: cm7y8xmdg0006i0ns2xaimdjf
+                    location:
+                      type: string
+                      example: example loc
+                    name:
+                      type: string
+                      example: Example
+                    ownerId:
+                      type: string
+                      example: cm7y8pkg30004i0nsd0646kux
+                    pictures:
+                      nullable: true
+                      example: null
+                    rooms:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          hotelId:
+                            type: string
+                            example: cm7y8xmdg0006i0ns2xaimdjf
+                          roomId:
+                            type: string
+                            example: cm7y98yya000ai0nsnwd9htuc
+                          roomNumber:
+                            type: number
+                            example: 1
+                          typeName:
+                            type: string
+                            example: example type
+                      example:
+                        - hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                          roomId: cm7y98yya000ai0nsnwd9htuc
+                          roomNumber: 1
+                          typeName: example type
+                    starRating:
+                      type: number
+                      example: 6
+                example:
+                  - address: example addr
+                    hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                    location: example loc
+                    name: Example
+                    ownerId: cm7y8pkg30004i0nsd0646kux
+                    pictures: null
+                    rooms:
+                      - hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                        roomId: cm7y98yya000ai0nsnwd9htuc
+                        roomNumber: 1
+                        typeName: example type
+                    starRating: 6
+              examples:
+                Get Hotels:
+                  value:
+                    - address: example addr
+                      hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                      location: example loc
+                      name: Example
+                      ownerId: cm7y8pkg30004i0nsd0646kux
+                      pictures: null
+                      rooms:
+                        - hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                          roomId: cm7y98yya000ai0nsnwd9htuc
+                          roomNumber: 1
+                          typeName: example type
+                      starRating: 6
+  /api/hotels/add/image:
+    post:
+      tags:
+        - Hotels
+      summary: Add Hotel Image
+      description: >-
+        This route is used to add/associate an image to a hotel. It returns a
+        success message on success. Requires a valid accessToken as
+        authorization.
+      operationId: addHotelImage
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                hotelId:
+                  type: string
+                  example: cm7y8xmdg0006i0ns2xaimdjf
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Add Hotel Image
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 04:06:07 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Image sent successfully
+              examples:
+                Add Hotel Image:
+                  value:
+                    message: Image sent successfully
+  /api/hotels/rooms/{roomId}:
+    get:
+      tags:
+        - Hotels
+      summary: Get Room By ID
+      description: >-
+        This route is used to get information on a specific room via the roomID.
+        It returns information on the room specified.
+      operationId: getRoomById
+      responses:
+        '200':
+          description: Get Room By ID
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 04:14:29 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    hotelId:
+                      type: string
+                      example: cm7y8xmdg0006i0ns2xaimdjf
+                    roomId:
+                      type: string
+                      example: cm7y98yya000ai0nsnwd9htuc
+                    roomNumber:
+                      type: number
+                      example: 1
+                    typeName:
+                      type: string
+                      example: example type
+                example:
+                  - hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                    roomId: cm7y98yya000ai0nsnwd9htuc
+                    roomNumber: 1
+                    typeName: example type
+              examples:
+                Get Room By ID:
+                  value:
+                    - hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                      roomId: cm7y98yya000ai0nsnwd9htuc
+                      roomNumber: 1
+                      typeName: example type
+    parameters:
+      - name: roomId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/hotels/type/image:
+    post:
+      tags:
+        - Hotels
+      summary: Add Room Image
+      description: >-
+        This route is used to add an image to a specific room. It returns a
+        success message on success. Requires a valid accessToken as
+        authentication.
+      operationId: addRoomImage
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                hotelId:
+                  type: string
+                  example: cm7y8xmdg0006i0ns2xaimdjf
+                image:
+                  type: string
+                  format: binary
+                typeName:
+                  type: string
+                  example: example type
+      responses:
+        '201':
+          description: Add Room Image
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 04:22:27 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful roomTypeImage
+              examples:
+                Add Room Image:
+                  value:
+                    message: Successful roomTypeImage
+  /api/hotels/{hotelId}:
+    get:
+      tags:
+        - Hotels
+      summary: Get Hotel By Id
+      description: Get Hotel By Id
+      operationId: getHotelById
+      parameters:
+        - name: checkInDate
+          in: query
+          schema:
+            type: string
+            example: '2025-03-01T14:00:00.000Z'
+        - name: checkOutDate
+          in: query
+          schema:
+            type: string
+            example: '2025-03-29T14:00:00.000Z'
+        - name: ''
+          in: header
+          schema:
+            type: string
+            example: ''
+      responses:
+        '200':
+          description: Get Hotel By Id
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sat, 08 Mar 2025 21:47:30 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    hotelId:
+                      type: string
+                      example: cm80e2jp60002i04cjcijxmtn
+                    roomId:
+                      type: string
+                      example: cm80e2zeb0004i04cahl0jnif
+                    roomNumber:
+                      type: number
+                      example: 1
+                    typeName:
+                      type: string
+                      example: example type
+                example:
+                  - hotelId: cm80e2jp60002i04cjcijxmtn
+                    roomId: cm80e2zeb0004i04cahl0jnif
+                    roomNumber: 1
+                    typeName: example type
+                  - hotelId: cm80e2jp60002i04cjcijxmtn
+                    roomId: cm80oeb4v000gi04c4qs85hq3
+                    roomNumber: 2
+                    typeName: example two
+              examples:
+                Get Hotel By Id:
+                  value:
+                    - hotelId: cm80e2jp60002i04cjcijxmtn
+                      roomId: cm80e2zeb0004i04cahl0jnif
+                      roomNumber: 1
+                      typeName: example type
+                    - hotelId: cm80e2jp60002i04cjcijxmtn
+                      roomId: cm80oeb4v000gi04c4qs85hq3
+                      roomNumber: 2
+                      typeName: example two
+    put:
+      tags:
+        - Hotels
+      summary: Update Hotel
+      description: >-
+        This route is used to update information on a hotel that has already
+        been created. returns inofmration on the newly updated hotel. Requires a
+        valid accessToken as authentication.
+      operationId: updateHotel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  example: new addr
+                name:
+                  type: string
+                  example: new name
+            examples:
+              Update Hotel:
+                value:
+                  address: new addr
+                  name: new name
+      responses:
+        '200':
+          description: Update Hotel
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 04:13:27 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address:
+                    type: string
+                    example: new addr
+                  hotelId:
+                    type: string
+                    example: cm7y8xmdg0006i0ns2xaimdjf
+                  location:
+                    type: string
+                    example: example loc
+                  name:
+                    type: string
+                    example: new name
+                  ownerId:
+                    type: string
+                    example: cm7y8pkg30004i0nsd0646kux
+                  pictures:
+                    nullable: true
+                    example: null
+                  starRating:
+                    type: number
+                    example: 6
+              examples:
+                Update Hotel:
+                  value:
+                    address: new addr
+                    hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                    location: example loc
+                    name: new name
+                    ownerId: cm7y8pkg30004i0nsd0646kux
+                    pictures: null
+                    starRating: 6
+    parameters:
+      - name: hotelId
+        in: path
+        required: true
+        schema:
+          type: string
+  /api/auth/cart/flight:
+    get:
+      tags:
+        - Cart
+      summary: GetFlightCart
+      description: >-
+        This route returns all the flights the user currently has in their cart.
+        Requires a valid accessToken for authorization.
+      operationId: getflightcart
+      responses:
+        '200':
+          description: CartFlight Copy
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sun, 09 Mar 2025 02:00:14 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    flightId:
+                      type: string
+                      example: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                    flightTempId:
+                      type: string
+                      example: cm80zk04z0002u72wuzpk5jbg
+                    userId:
+                      type: string
+                      example: cm80zi6aq0000u72w80kipm06
+                example:
+                  - flightId: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                    flightTempId: cm80zk04z0002u72wuzpk5jbg
+                    userId: cm80zi6aq0000u72w80kipm06
+              examples:
+                CartFlight Copy:
+                  value:
+                    - flightId: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                      flightTempId: cm80zk04z0002u72wuzpk5jbg
+                      userId: cm80zi6aq0000u72w80kipm06
+      security:
+        - {}
+    post:
+      tags:
+        - Cart
+      summary: CartFlight
+      description: >-
+        This route is used to add a request to the cart, it returns the cart
+        item details upon success. Requires a valid accessToken for
+        authorization.
+      operationId: cartflight
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flightId:
+                  type: string
+                  example: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+            examples:
+              CartFlight:
+                value:
+                  flightId: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+      responses:
+        '200':
+          description: CartFlight
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sun, 09 Mar 2025 01:59:48 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  flightId:
+                    type: string
+                    example: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                  flightTempId:
+                    type: string
+                    example: cm80zk04z0002u72wuzpk5jbg
+                  userId:
+                    type: string
+                    example: cm80zi6aq0000u72w80kipm06
+              examples:
+                CartFlight:
+                  value:
+                    flightId: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                    flightTempId: cm80zk04z0002u72wuzpk5jbg
+                    userId: cm80zi6aq0000u72w80kipm06
+      security:
+        - {}
+    delete:
+      tags:
+        - Cart
+      summary: DeleteFlightCart
+      description: >-
+        This route deletes a specific item from their flight cart given the
+        flight cart items id. Requires a valid accessToken for authorization.
+      operationId: deleteflightcart
+      parameters:
+        - name: flightTempId
+          in: query
+          schema:
+            type: string
+            example: '{{flightTempId}}'
+      responses:
+        '200':
+          description: DeleteFlightCart Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sun, 09 Mar 2025 02:06:43 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Flight removed from cart
+              examples:
+                DeleteFlightCart Response:
+                  value:
+                    message: Flight removed from cart
+      security:
+        - {}
+  /api/auth/cart/checkout:
+    post:
+      tags:
+        - Cart
+      summary: Checkout
+      description: >-
+        This route is used to validate a credit card's information. Requires a
+        valid accessToken for authorization.
+      operationId: checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                creditCardNumber:
+                  type: string
+                  example: '1234567890123456'
+                cvv:
+                  type: string
+                  example: '1234'
+                expiryDate:
+                  type: string
+                  example: '2026-01-01'
+            examples:
+              Checkout:
+                value:
+                  creditCardNumber: '1234567890123456'
+                  cvv: '1234'
+                  expiryDate: '2026-01-01'
+      responses:
+        '200':
+          description: Checkout Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sun, 09 Mar 2025 02:11:22 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Credit card details are valid
+              examples:
+                Checkout Response:
+                  value:
+                    message: Credit card details are valid
+      security:
+        - {}
+  /api/auth/cart/hotel:
+    get:
+      tags:
+        - Cart
+      summary: GetHotelCart
+      description: >-
+        This route is used to get all the hotel bookings that have been saved in
+        the users cart. Requires a valid accessToken to authorize.
+      operationId: gethotelcart
+      parameters:
+        - name: ''
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: GetHotelCart
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sun, 09 Mar 2025 02:31:44 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    checkInDate:
+                      type: string
+                      example: '2025-03-11T14:00:00.000Z'
+                    checkOutDate:
+                      type: string
+                      example: '2025-03-13T14:00:00.000Z'
+                    roomId:
+                      type: string
+                      example: cm80y0qrs0004i0c0n9phgxis
+                    userId:
+                      type: string
+                      example: cm80y06ei0000i0c0qcz8f3qj
+                example:
+                  - checkInDate: '2025-03-11T14:00:00.000Z'
+                    checkOutDate: '2025-03-13T14:00:00.000Z'
+                    roomId: cm80y0qrs0004i0c0n9phgxis
+                    userId: cm80y06ei0000i0c0qcz8f3qj
+              examples:
+                GetHotelCart:
+                  value:
+                    - checkInDate: '2025-03-11T14:00:00.000Z'
+                      checkOutDate: '2025-03-13T14:00:00.000Z'
+                      roomId: cm80y0qrs0004i0c0n9phgxis
+                      userId: cm80y06ei0000i0c0qcz8f3qj
+      security:
+        - {}
+    post:
+      tags:
+        - Cart
+      summary: AddHotelCartItem
+      description: >-
+        This route is used to add a hotel booking item to the users cart.
+        Requires a valid accessToken to authenticate.
+      operationId: addhotelcartitem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checkInDate:
+                  type: string
+                  example: '2025-03-11T14:00:00.000Z'
+                checkOutDate:
+                  type: string
+                  example: '2025-03-13T14:00:00.000Z'
+                roomId:
+                  type: string
+                  example: cm80y21k1000ai0c07jkiw41d
+            examples:
+              AddHotelCartItem:
+                value:
+                  checkInDate: '2025-03-11T14:00:00.000Z'
+                  checkOutDate: '2025-03-13T14:00:00.000Z'
+                  roomId: cm80y21k1000ai0c07jkiw41d
+      responses:
+        '200':
+          description: AddHotelCartItem
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sun, 09 Mar 2025 02:34:52 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Hotel booking added to cart
+              examples:
+                AddHotelCartItem:
+                  value:
+                    message: Hotel booking added to cart
+      security:
+        - {}
+    delete:
+      tags:
+        - Cart
+      summary: DeleteHotelItem
+      description: >-
+        This route is used to delete a hotel booking item from the users cart.
+        Requires a valid accessToken to authenticate
+      operationId: deletehotelitem
+      parameters:
+        - name: roomId
+          in: query
+          schema:
+            type: string
+            example: '{{roomId}}'
+        - name: checkInDate
+          in: query
+          schema:
+            type: string
+            example: '2025-03-11T14:00:00.000Z'
+        - name: checkOutDate
+          in: query
+          schema:
+            type: string
+            example: '2025-03-13T14:00:00.000Z'
+      responses:
+        '200':
+          description: DeleteHotelItem
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sun, 09 Mar 2025 02:28:31 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: HotelBooking removed from cart
+              examples:
+                DeleteHotelItem:
+                  value:
+                    message: HotelBooking removed from cart
+      security:
+        - {}
+  /api/bookings/flight:
+    get:
+      tags:
+        - Booking
+      summary: CheckingFlightBooking
+      description: >-
+        This route is used to check a flight booking. It returns detailed
+        information on the booking.
+      operationId: checkingflightbooking
+      parameters:
+        - name: flightBookingId
+          in: query
+          schema:
+            type: string
+            example: '{{flightBookingId}}'
+      responses:
+        '200':
+          description: CheckingFlightBooking Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 23:03:01 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bookingDetails:
+                    type: object
+                    properties:
+                      agencyId:
+                        type: string
+                        example: 157a17e2-57c4-443e-973a-96acb455a645
+                      bookingReference:
+                        type: string
+                        example: 8D4625
+                      createdAt:
+                        type: string
+                        example: '2025-03-07T23:01:09.231Z'
+                      email:
+                        type: string
+                        example: john.doe@gmail.com
+                      firstName:
+                        type: string
+                        example: Johnathan
+                      flights:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            airline:
+                              type: object
+                              properties:
+                                code:
+                                  type: string
+                                  example: MU
+                                name:
+                                  type: string
+                                  example: China Eastern Airlines
+                            arrivalTime:
+                              type: string
+                              example: '2024-11-19T02:30:00.000Z'
+                            availableSeats:
+                              type: number
+                              example: 195
+                            currency:
+                              type: string
+                              example: CAD
+                            departureTime:
+                              type: string
+                              example: '2024-11-18T12:40:00.000Z'
+                            destination:
+                              type: object
+                              properties:
+                                city:
+                                  type: string
+                                  example: Zurich
+                                code:
+                                  type: string
+                                  example: ZRH
+                                country:
+                                  type: string
+                                  example: Switzerland
+                                name:
+                                  type: string
+                                  example: Zurich Airport
+                            destinationId:
+                              type: string
+                              example: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                            duration:
+                              type: number
+                              example: 830
+                            flightNumber:
+                              type: string
+                              example: MU1525
+                            id:
+                              type: string
+                              example: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                            origin:
+                              type: object
+                              properties:
+                                city:
+                                  type: string
+                                  example: Shanghai
+                                code:
+                                  type: string
+                                  example: PVG
+                                country:
+                                  type: string
+                                  example: China
+                                name:
+                                  type: string
+                                  example: Shanghai Pudong International Airport
+                            originId:
+                              type: string
+                              example: 42fb9788-abab-4395-be2c-0ee891a161d6
+                            price:
+                              type: number
+                              example: 1123
+                            status:
+                              type: string
+                              example: SCHEDULED
+                        example:
+                          - airline:
+                              code: MU
+                              name: China Eastern Airlines
+                            arrivalTime: '2024-11-19T02:30:00.000Z'
+                            availableSeats: 195
+                            currency: CAD
+                            departureTime: '2024-11-18T12:40:00.000Z'
+                            destination:
+                              city: Zurich
+                              code: ZRH
+                              country: Switzerland
+                              name: Zurich Airport
+                            destinationId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                            duration: 830
+                            flightNumber: MU1525
+                            id: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                            origin:
+                              city: Shanghai
+                              code: PVG
+                              country: China
+                              name: Shanghai Pudong International Airport
+                            originId: 42fb9788-abab-4395-be2c-0ee891a161d6
+                            price: 1123
+                            status: SCHEDULED
+                      lastName:
+                        type: string
+                        example: Deer
+                      passportNumber:
+                        type: string
+                        example: AR0123678
+                      status:
+                        type: string
+                        example: CONFIRMED
+                      ticketNumber:
+                        type: string
+                        example: 43a3e495b1
+              examples:
+                CheckingFlightBooking Response:
+                  value:
+                    bookingDetails:
+                      agencyId: 157a17e2-57c4-443e-973a-96acb455a645
+                      bookingReference: 8D4625
+                      createdAt: '2025-03-07T23:01:09.231Z'
+                      email: john.doe@gmail.com
+                      firstName: Johnathan
+                      flights:
+                        - airline:
+                            code: MU
+                            name: China Eastern Airlines
+                          arrivalTime: '2024-11-19T02:30:00.000Z'
+                          availableSeats: 195
+                          currency: CAD
+                          departureTime: '2024-11-18T12:40:00.000Z'
+                          destination:
+                            city: Zurich
+                            code: ZRH
+                            country: Switzerland
+                            name: Zurich Airport
+                          destinationId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                          duration: 830
+                          flightNumber: MU1525
+                          id: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                          origin:
+                            city: Shanghai
+                            code: PVG
+                            country: China
+                            name: Shanghai Pudong International Airport
+                          originId: 42fb9788-abab-4395-be2c-0ee891a161d6
+                          price: 1123
+                          status: SCHEDULED
+                      lastName: Deer
+                      passportNumber: AR0123678
+                      status: CONFIRMED
+                      ticketNumber: 43a3e495b1
+    post:
+      tags:
+        - Booking
+      summary: BookingFlight
+      description: >-
+        This route is used to book a flight. It returns barebones information on
+        the bookings. Requires a valid accessToken as authentication.
+      operationId: bookingflight
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flightId:
+                  type: string
+                  example: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                passportNumber:
+                  type: string
+                  example: AR0123678
+            examples:
+              BookingFlight:
+                value:
+                  flightId: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                  passportNumber: AR0123678
+      responses:
+        '201':
+          description: BookingFlight Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 23:01:10 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  booking:
+                    type: object
+                    properties:
+                      bookingReference:
+                        type: string
+                        example: 8D4625
+                      flightBookingId:
+                        type: string
+                        example: cm7zdqera0000u7s0r004j1mq
+                      lastName:
+                        type: string
+                        example: Deer
+                      userId:
+                        type: string
+                        example: cm7y7rnhr0000u7ik6y8knqmb
+                  message:
+                    type: string
+                    example: Flight booked successfully
+              examples:
+                BookingFlight Response:
+                  value:
+                    booking:
+                      bookingReference: 8D4625
+                      flightBookingId: cm7zdqera0000u7s0r004j1mq
+                      lastName: Deer
+                      userId: cm7y7rnhr0000u7ik6y8knqmb
+                    message: Flight booked successfully
+  /api/bookings/hotel:
+    put:
+      tags:
+        - Booking
+      summary: DeleteHotelBooking
+      description: DeleteHotelBooking
+      operationId: deletehotelbooking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checkInDate:
+                  type: string
+                  example: '2025-03-20T14:00:00.000Z'
+                checkOutDate:
+                  type: string
+                  example: '2025-03-25T11:00:00.000Z'
+                roomId:
+                  type: string
+                  example: cm7y98yya000ai0nsnwd9htuc
+                userId:
+                  type: string
+                  example: cm7y8pkg30004i0nsd0646kux
+            examples:
+              DeleteHotelBooking:
+                value:
+                  checkInDate: '2025-03-20T14:00:00.000Z'
+                  checkOutDate: '2025-03-25T11:00:00.000Z'
+                  roomId: cm7y98yya000ai0nsnwd9htuc
+                  userId: cm7y8pkg30004i0nsd0646kux
+      responses:
+        '200':
+          description: DeleteHotelBooking Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 04:16:00 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      checkInDate:
+                        type: string
+                        example: '2025-03-20T14:00:00.000Z'
+                      checkOutDate:
+                        type: string
+                        example: '2025-03-25T11:00:00.000Z'
+                      roomId:
+                        type: string
+                        example: cm7y98yya000ai0nsnwd9htuc
+                      userId:
+                        type: string
+                        example: cm7y8pkg30004i0nsd0646kux
+                  success:
+                    type: boolean
+                    example: true
+              examples:
+                DeleteHotelBooking Response:
+                  value:
+                    data:
+                      checkInDate: '2025-03-20T14:00:00.000Z'
+                      checkOutDate: '2025-03-25T11:00:00.000Z'
+                      roomId: cm7y98yya000ai0nsnwd9htuc
+                      userId: cm7y8pkg30004i0nsd0646kux
+                    success: true
+    post:
+      tags:
+        - Booking
+      summary: HotelBooking
+      description: >-
+        This route is used to book a hotel room. It requires the desired room
+        type and date of stay. Returns information on the booking. Requires a
+        valid accessToken as authentication.
+      operationId: hotelbooking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checkInDate:
+                  type: string
+                  example: '2025-03-01T14:00:00.000Z'
+                checkOutDate:
+                  type: string
+                  example: '2025-03-02T11:00:00.000Z'
+                roomId:
+                  type: string
+                  example: ''
+            examples:
+              HotelBooking:
+                value:
+                  checkInDate: '2025-03-01T14:00:00.000Z'
+                  checkOutDate: '2025-03-02T11:00:00.000Z'
+                  roomId: ''
+      responses:
+        '200':
+          description: HotelBooking
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sat, 08 Mar 2025 22:00:30 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  checkInDate:
+                    type: string
+                    example: '2025-03-01T14:00:00.000Z'
+                  checkOutDate:
+                    type: string
+                    example: '2025-03-02T11:00:00.000Z'
+                  hotelId:
+                    type: string
+                    example: cm80e2jp60002i04cjcijxmtn
+                  price:
+                    type: number
+                    example: 250
+                  roomId:
+                    type: string
+                    example: cm80oeb4v000gi04c4qs85hq3
+                  status:
+                    type: string
+                    example: reserved
+                  typeName:
+                    type: string
+                    example: example two
+                  userId:
+                    type: string
+                    example: cm80e2a610000i04c2ch35uu2
+              examples:
+                HotelBooking:
+                  value:
+                    checkInDate: '2025-03-01T14:00:00.000Z'
+                    checkOutDate: '2025-03-02T11:00:00.000Z'
+                    hotelId: cm80e2jp60002i04cjcijxmtn
+                    price: 250
+                    roomId: cm80oeb4v000gi04c4qs85hq3
+                    status: reserved
+                    typeName: example two
+                    userId: cm80e2a610000i04c2ch35uu2
+  /api/hotels/booked:
+    get:
+      tags:
+        - Booking
+      summary: GetBookedHotelRooms
+      description: >-
+        This route is used to get information on booked hotel rooms. Returns
+        information on the hotel booking requested. Requires a valid accessToken
+        as authentication.
+      operationId: getbookedhotelrooms
+      parameters:
+        - name: hotelId
+          in: query
+          schema:
+            type: string
+            example: '{{hotelId}}'
+        - name: checkInDate
+          in: query
+          schema:
+            type: string
+            example: '2025-03-01T14:00:00.000Z'
+        - name: checkOutDate
+          in: query
+          schema:
+            type: string
+            example: '2025-03-30T14:00:00.000Z'
+        - name: roomType
+          in: query
+          schema:
+            type: string
+            example: example type
+      responses:
+        '200':
+          description: GetBookedHotelRooms Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 18:56:54 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    checkInDate:
+                      type: string
+                      example: '2025-03-20T14:00:00.000Z'
+                    checkOutDate:
+                      type: string
+                      example: '2025-03-25T11:00:00.000Z'
+                    hotelId:
+                      type: string
+                      example: cm7y8xmdg0006i0ns2xaimdjf
+                    roomId:
+                      type: string
+                      example: cm7y98yya000ai0nsnwd9htuc
+                    typeName:
+                      type: string
+                      example: example type
+                    userId:
+                      type: string
+                      example: cm7y8pkg30004i0nsd0646kux
+                example:
+                  - checkInDate: '2025-03-20T14:00:00.000Z'
+                    checkOutDate: '2025-03-25T11:00:00.000Z'
+                    hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                    roomId: cm7y98yya000ai0nsnwd9htuc
+                    typeName: example type
+                    userId: cm7y8pkg30004i0nsd0646kux
+              examples:
+                GetBookedHotelRooms Response:
+                  value:
+                    - checkInDate: '2025-03-20T14:00:00.000Z'
+                      checkOutDate: '2025-03-25T11:00:00.000Z'
+                      hotelId: cm7y8xmdg0006i0ns2xaimdjf
+                      roomId: cm7y98yya000ai0nsnwd9htuc
+                      typeName: example type
+                      userId: cm7y8pkg30004i0nsd0646kux
+  /api/bookings:
+    get:
+      tags:
+        - Booking
+      summary: GetAllBookings
+      description: >-
+        This route is used to get all the bookings that a user has made. It
+        returns a list containing information on all their bookings, hotel and
+        flights. Requires a valid accessToken as authentication.
+      operationId: getallbookings
+      responses:
+        '200':
+          description: GetAllBookings Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 23:20:47 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  flightBookings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        bookingReference:
+                          type: string
+                          example: 8D4625
+                        flightBookingId:
+                          type: string
+                          example: cm7zdqera0000u7s0r004j1mq
+                        lastName:
+                          type: string
+                          example: Deer
+                        userId:
+                          type: string
+                          example: cm7y7rnhr0000u7ik6y8knqmb
+                    example:
+                      - bookingReference: 8D4625
+                        flightBookingId: cm7zdqera0000u7s0r004j1mq
+                        lastName: Deer
+                        userId: cm7y7rnhr0000u7ik6y8knqmb
+                  hotelBooking:
+                    type: array
+                    items: {}
+                    example: []
+              examples:
+                GetAllBookings Response:
+                  value:
+                    flightBookings:
+                      - bookingReference: 8D4625
+                        flightBookingId: cm7zdqera0000u7s0r004j1mq
+                        lastName: Deer
+                        userId: cm7y7rnhr0000u7ik6y8knqmb
+                    hotelBooking: []
+      security:
+        - {}
+  /api/flights/search:
+    get:
+      tags:
+        - Flights
+      summary: SearchFlightOneWay
+      description: >-
+        This route is used to find flights. It can be used for both oneWay
+        flights and roundTrip flights. When used for oneWay, a there cannot be
+        returnDate. It returns a list of all flights fitting the criteria.
+      operationId: searchflightoneway
+      parameters:
+        - name: origin
+          in: query
+          schema:
+            type: string
+            example: Toronto
+        - name: destination
+          in: query
+          schema:
+            type: string
+            example: Zurich
+        - name: date
+          in: query
+          schema:
+            type: string
+            example: '2024-11-17'
+        - name: tripType
+          in: query
+          schema:
+            type: string
+            example: oneWay
+        - name: returnDate
+          in: query
+          schema:
+            type: string
+            example: '2024-11-18'
+      responses:
+        '200':
+          description: SearchFlightOneWay Response / SearchFlightRoundTrip Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Fri, 07 Mar 2025 22:47:19 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  inboundFlights:
+                    type: array
+                    items: {}
+                    example: []
+                  outboundFlights:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        airline:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                              example: AC
+                            name:
+                              type: string
+                              example: Air Canada
+                        arrivalTime:
+                          type: string
+                          example: '2024-11-18T02:00:00.000Z'
+                        availableSeats:
+                          type: number
+                          example: 0
+                        currency:
+                          type: string
+                          example: CAD
+                        departureTime:
+                          type: string
+                          example: '2024-11-17T14:50:00.000Z'
+                        destination:
+                          type: object
+                          properties:
+                            city:
+                              type: string
+                              example: Zurich
+                            code:
+                              type: string
+                              example: ZRH
+                            country:
+                              type: string
+                              example: Switzerland
+                            name:
+                              type: string
+                              example: Zurich Airport
+                        destinationId:
+                          type: string
+                          example: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                        duration:
+                          type: number
+                          example: 670
+                        flightNumber:
+                          type: string
+                          example: AC8762
+                        id:
+                          type: string
+                          example: bd7ee4df-004d-4c95-abda-633d276a5842
+                        origin:
+                          type: object
+                          properties:
+                            city:
+                              type: string
+                              example: Toronto
+                            code:
+                              type: string
+                              example: YYZ
+                            country:
+                              type: string
+                              example: Canada
+                            name:
+                              type: string
+                              example: Toronto Pearson International Airport
+                        originId:
+                          type: string
+                          example: 370d2633-ba94-47f5-a735-513c0e332224
+                        price:
+                          type: number
+                          example: 1744
+                        status:
+                          type: string
+                          example: SCHEDULED
+                    example:
+                      - airline:
+                          code: AC
+                          name: Air Canada
+                        arrivalTime: '2024-11-18T02:00:00.000Z'
+                        availableSeats: 0
+                        currency: CAD
+                        departureTime: '2024-11-17T14:50:00.000Z'
+                        destination:
+                          city: Zurich
+                          code: ZRH
+                          country: Switzerland
+                          name: Zurich Airport
+                        destinationId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                        duration: 670
+                        flightNumber: AC8762
+                        id: bd7ee4df-004d-4c95-abda-633d276a5842
+                        origin:
+                          city: Toronto
+                          code: YYZ
+                          country: Canada
+                          name: Toronto Pearson International Airport
+                        originId: 370d2633-ba94-47f5-a735-513c0e332224
+                        price: 1744
+                        status: SCHEDULED
+                      - airline:
+                          code: AC
+                          name: Air Canada
+                        arrivalTime: '2024-11-18T06:20:00.000Z'
+                        availableSeats: 54
+                        currency: CAD
+                        departureTime: '2024-11-17T20:30:00.000Z'
+                        destination:
+                          city: Shanghai
+                          code: PVG
+                          country: China
+                          name: Shanghai Pudong International Airport
+                        destinationId: 42fb9788-abab-4395-be2c-0ee891a161d6
+                        duration: 590
+                        flightNumber: AC7719
+                        id: ee372818-cd33-4886-9088-d601947777a2
+                        origin:
+                          city: Toronto
+                          code: YYZ
+                          country: Canada
+                          name: Toronto Pearson International Airport
+                        originId: 370d2633-ba94-47f5-a735-513c0e332224
+                        price: 1765
+                        status: SCHEDULED
+                      - airline:
+                          code: MU
+                          name: China Eastern Airlines
+                        arrivalTime: '2024-11-19T02:30:00.000Z'
+                        availableSeats: 196
+                        currency: CAD
+                        departureTime: '2024-11-18T12:40:00.000Z'
+                        destination:
+                          city: Zurich
+                          code: ZRH
+                          country: Switzerland
+                          name: Zurich Airport
+                        destinationId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                        duration: 830
+                        flightNumber: MU1525
+                        id: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                        origin:
+                          city: Shanghai
+                          code: PVG
+                          country: China
+                          name: Shanghai Pudong International Airport
+                        originId: 42fb9788-abab-4395-be2c-0ee891a161d6
+                        price: 1123
+                        status: SCHEDULED
+              examples:
+                SearchFlightOneWay Response:
+                  value:
+                    inboundFlights: []
+                    outboundFlights:
+                      - airline:
+                          code: AC
+                          name: Air Canada
+                        arrivalTime: '2024-11-18T02:00:00.000Z'
+                        availableSeats: 0
+                        currency: CAD
+                        departureTime: '2024-11-17T14:50:00.000Z'
+                        destination:
+                          city: Zurich
+                          code: ZRH
+                          country: Switzerland
+                          name: Zurich Airport
+                        destinationId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                        duration: 670
+                        flightNumber: AC8762
+                        id: bd7ee4df-004d-4c95-abda-633d276a5842
+                        origin:
+                          city: Toronto
+                          code: YYZ
+                          country: Canada
+                          name: Toronto Pearson International Airport
+                        originId: 370d2633-ba94-47f5-a735-513c0e332224
+                        price: 1744
+                        status: SCHEDULED
+                      - airline:
+                          code: AC
+                          name: Air Canada
+                        arrivalTime: '2024-11-18T06:20:00.000Z'
+                        availableSeats: 54
+                        currency: CAD
+                        departureTime: '2024-11-17T20:30:00.000Z'
+                        destination:
+                          city: Shanghai
+                          code: PVG
+                          country: China
+                          name: Shanghai Pudong International Airport
+                        destinationId: 42fb9788-abab-4395-be2c-0ee891a161d6
+                        duration: 590
+                        flightNumber: AC7719
+                        id: ee372818-cd33-4886-9088-d601947777a2
+                        origin:
+                          city: Toronto
+                          code: YYZ
+                          country: Canada
+                          name: Toronto Pearson International Airport
+                        originId: 370d2633-ba94-47f5-a735-513c0e332224
+                        price: 1765
+                        status: SCHEDULED
+                      - airline:
+                          code: MU
+                          name: China Eastern Airlines
+                        arrivalTime: '2024-11-19T02:30:00.000Z'
+                        availableSeats: 196
+                        currency: CAD
+                        departureTime: '2024-11-18T12:40:00.000Z'
+                        destination:
+                          city: Zurich
+                          code: ZRH
+                          country: Switzerland
+                          name: Zurich Airport
+                        destinationId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                        duration: 830
+                        flightNumber: MU1525
+                        id: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                        origin:
+                          city: Shanghai
+                          code: PVG
+                          country: China
+                          name: Shanghai Pudong International Airport
+                        originId: 42fb9788-abab-4395-be2c-0ee891a161d6
+                        price: 1123
+                        status: SCHEDULED
+                SearchFlightRoundTrip Response:
+                  value:
+                    inboundFlights:
+                      - airline:
+                          code: LX
+                          name: Swiss International Air Lines
+                        arrivalTime: '2024-11-18T16:40:00.000Z'
+                        availableSeats: 129
+                        currency: CAD
+                        departureTime: '2024-11-18T05:45:00.000Z'
+                        destination:
+                          city: Colombo
+                          code: CMB
+                          country: Sri Lanka
+                          name: Bandaranaike International Airport
+                        destinationId: 9b89762a-74d8-4389-915f-ce55daba1c48
+                        duration: 655
+                        flightNumber: LX512
+                        id: 20b185f3-f801-4226-b1ef-c59b74b6b97c
+                        origin:
+                          city: Zurich
+                          code: ZRH
+                          country: Switzerland
+                          name: Zurich Airport
+                        originId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                        price: 339
+                        status: SCHEDULED
+                      - airline:
+                          code: UL
+                          name: SriLankan Airlines
+                        arrivalTime: '2024-11-20T07:00:00.000Z'
+                        availableSeats: 243
+                        currency: CAD
+                        departureTime: '2024-11-19T17:40:00.000Z'
+                        destination:
+                          city: Toronto
+                          code: YYZ
+                          country: Canada
+                          name: Toronto Pearson International Airport
+                        destinationId: 370d2633-ba94-47f5-a735-513c0e332224
+                        duration: 800
+                        flightNumber: UL9494
+                        id: ff89b041-d78a-40fc-9861-929a4fefa99b
+                        origin:
+                          city: Colombo
+                          code: CMB
+                          country: Sri Lanka
+                          name: Bandaranaike International Airport
+                        originId: 9b89762a-74d8-4389-915f-ce55daba1c48
+                        price: 826
+                        status: SCHEDULED
+                      - airline:
+                          code: LX
+                          name: Swiss International Air Lines
+                        arrivalTime: '2024-11-18T16:40:00.000Z'
+                        availableSeats: 129
+                        currency: CAD
+                        departureTime: '2024-11-18T05:45:00.000Z'
+                        destination:
+                          city: Colombo
+                          code: CMB
+                          country: Sri Lanka
+                          name: Bandaranaike International Airport
+                        destinationId: 9b89762a-74d8-4389-915f-ce55daba1c48
+                        duration: 655
+                        flightNumber: LX512
+                        id: 20b185f3-f801-4226-b1ef-c59b74b6b97c
+                        origin:
+                          city: Zurich
+                          code: ZRH
+                          country: Switzerland
+                          name: Zurich Airport
+                        originId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                        price: 339
+                        status: SCHEDULED
+                      - airline:
+                          code: UL
+                          name: SriLankan Airlines
+                        arrivalTime: '2024-11-19T02:05:00.000Z'
+                        availableSeats: 175
+                        currency: CAD
+                        departureTime: '2024-11-18T19:55:00.000Z'
+                        destination:
+                          city: Toronto
+                          code: YTZ
+                          country: Canada
+                          name: Billy Bishop Toronto City Airport
+                        destinationId: b4183787-d9e7-4c29-939d-1cc1cfc72b19
+                        duration: 370
+                        flightNumber: UL2975
+                        id: 2bb03113-4b88-46aa-bd4e-a79b53b6e975
+                        origin:
+                          city: Colombo
+                          code: CMB
+                          country: Sri Lanka
+                          name: Bandaranaike International Airport
+                        originId: 9b89762a-74d8-4389-915f-ce55daba1c48
+                        price: 804
+                        status: SCHEDULED
+                    outboundFlights:
+                      - airline:
+                          code: AC
+                          name: Air Canada
+                        arrivalTime: '2024-11-18T02:00:00.000Z'
+                        availableSeats: 0
+                        currency: CAD
+                        departureTime: '2024-11-17T14:50:00.000Z'
+                        destination:
+                          city: Zurich
+                          code: ZRH
+                          country: Switzerland
+                          name: Zurich Airport
+                        destinationId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                        duration: 670
+                        flightNumber: AC8762
+                        id: bd7ee4df-004d-4c95-abda-633d276a5842
+                        origin:
+                          city: Toronto
+                          code: YYZ
+                          country: Canada
+                          name: Toronto Pearson International Airport
+                        originId: 370d2633-ba94-47f5-a735-513c0e332224
+                        price: 1744
+                        status: SCHEDULED
+                      - airline:
+                          code: AC
+                          name: Air Canada
+                        arrivalTime: '2024-11-18T06:20:00.000Z'
+                        availableSeats: 54
+                        currency: CAD
+                        departureTime: '2024-11-17T20:30:00.000Z'
+                        destination:
+                          city: Shanghai
+                          code: PVG
+                          country: China
+                          name: Shanghai Pudong International Airport
+                        destinationId: 42fb9788-abab-4395-be2c-0ee891a161d6
+                        duration: 590
+                        flightNumber: AC7719
+                        id: ee372818-cd33-4886-9088-d601947777a2
+                        origin:
+                          city: Toronto
+                          code: YYZ
+                          country: Canada
+                          name: Toronto Pearson International Airport
+                        originId: 370d2633-ba94-47f5-a735-513c0e332224
+                        price: 1765
+                        status: SCHEDULED
+                      - airline:
+                          code: MU
+                          name: China Eastern Airlines
+                        arrivalTime: '2024-11-19T02:30:00.000Z'
+                        availableSeats: 196
+                        currency: CAD
+                        departureTime: '2024-11-18T12:40:00.000Z'
+                        destination:
+                          city: Zurich
+                          code: ZRH
+                          country: Switzerland
+                          name: Zurich Airport
+                        destinationId: 2bcb7925-96aa-4de8-9ec1-3622e954c0b6
+                        duration: 830
+                        flightNumber: MU1525
+                        id: 9383ba28-71a6-4493-8849-a5d0c5ae7802
+                        origin:
+                          city: Shanghai
+                          code: PVG
+                          country: China
+                          name: Shanghai Pudong International Airport
+                        originId: 42fb9788-abab-4395-be2c-0ee891a161d6
+                        price: 1123
+                        status: SCHEDULED
+      security:
+        - {}
+  /api/notification:
+    get:
+      tags:
+        - Notification
+      summary: GetNotifications
+      description: >-
+        This route is used to get information on all a user's notifications.
+        Requires a valid accessToken for authentication.
+      operationId: getnotifications
+      responses:
+        '200':
+          description: GetNotifications Response
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sat, 08 Mar 2025 02:22:41 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: >-
+                        Your flight with booking reference 541C70 has been
+                        successfully booked.
+                    notificationId:
+                      type: string
+                      example: cm7zjk75x0007u7ysl849pefp
+                    userId:
+                      type: string
+                      example: cm7zjjiwn0000u7ysqt4fvatn
+                example:
+                  - message: >-
+                      Your flight with booking reference 541C70 has been
+                      successfully booked.
+                    notificationId: cm7zjk75x0007u7ysl849pefp
+                    userId: cm7zjjiwn0000u7ysqt4fvatn
+                  - message: Someone has booked your hotel.
+                    notificationId: cm7zjkamr0009u7ys6tec5spd
+                    userId: cm7zjjiwn0000u7ysqt4fvatn
+              examples:
+                GetNotifications Response:
+                  value:
+                    - message: >-
+                        Your flight with booking reference 541C70 has been
+                        successfully booked.
+                      notificationId: cm7zjk75x0007u7ysl849pefp
+                      userId: cm7zjjiwn0000u7ysqt4fvatn
+                    - message: Someone has booked your hotel.
+                      notificationId: cm7zjkamr0009u7ys6tec5spd
+                      userId: cm7zjjiwn0000u7ysqt4fvatn
+      security:
+        - {}
+    delete:
+      tags:
+        - Notification
+      summary: DeleteNotification
+      description: >-
+        This route is used to delete a user's notification. Requires a valid
+        accessToken for authentication.
+      operationId: deletenotification
+      parameters:
+        - name: notificationId
+          in: query
+          schema:
+            type: string
+            example: '{{firstNotificationId}}'
+      responses:
+        '200':
+          description: DeleteNotification
+          headers:
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Date:
+              schema:
+                type: string
+                example: Sat, 08 Mar 2025 02:30:48 GMT
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            vary:
+              schema:
+                type: string
+                example: >-
+                  RSC, Next-Router-State-Tree, Next-Router-Prefetch,
+                  Next-Router-Segment-Prefetch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Notification deleted successfully
+              examples:
+                DeleteNotification:
+                  value:
+                    message: Notification deleted successfully
+      security:
+        - {}
+components:
+  securitySchemes: {}
+tags:
+  - name: Authentication
+    description: >-
+      Here we have the requests on how to register an account. Login to recieve
+      an access token and refresh token. As well a refresh path to aquire a new
+      access token given an authentication token.
+  - name: User
+    description: >-
+      Here contains methods for getting the user information. You must have the
+      correct access token. We also have methods to update user information, you
+      must have at least one field to update, a user can't change/update their
+      email. Finally, we have a way to change/upload a profile picture for the
+      user.
+  - name: Hotels
+    description: >-
+      These routes are for users to manipulate, add, and manage their hotels and
+      their rooms.
+  - name: Cart
+    description: >-
+      Here contains the routes that are used for adding/removing/checking items
+      in the user's cart
+  - name: Booking
+    description: >-
+      This section contains all the routes used to book flights and hotels, as
+      well as any routes to view your bookings.
+  - name: Flights
+  - name: Notification
+    description: This folder contains the methods regarding notifications.

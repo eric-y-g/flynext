@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  userId    String @id @default(cuid())
+  email     String @unique
+  firstName String
+  lastName  String
+  phoneNumber String
+  password  String
+  profilePic String?
+  profilePicId String?
+  flightCart flightTemp[]
+  flightBookings  flightBooking[]
+  hotels    Hotel[]
+  hotelBooking     hotelBooking[]
+  notifications    Notifications[]
+  hotelTemps       hotelTemp[]
+  invoices   Invoice[]
+}
+
+model Hotel{
+  hotelId String @id @default(cuid())
+  name String
+  address String 
+  location String 
+  starRating Int
+  ownerId String
+  pictures Bytes?
+  rooms Room[]
+  hotelImages hotelImage[]
+  user User @relation(fields: [ownerId], references: [userId])
+}
+
+model hotelImage{
+  hotelImageId String @id @default(cuid())
+  picture String?
+  pictureId String? @unique // Used for deleting the image from cloudinary
+  hotelId String
+  hotel Hotel @relation(fields: [hotelId], references: [hotelId])
+}
+
+model Room{
+  roomId String @id @default(cuid())
+  roomNumber Int
+  hotelId String 
+  typeName String
+  roomType RoomType @relation(fields: [hotelId, typeName], references: [hotelId, typeName])
+  hotel Hotel @relation(fields: [hotelId], references: [hotelId])
+  @@unique([hotelId, roomNumber])
+  hotelBooking hotelBooking[]
+  hotelTemps hotelTemp[]
+  deactivate deavtivated?
+}
+
+model RoomType{
+  typeName String 
+  hotelId String
+  amenities String 
+  pricePerNight Float
+  rooms Room[]
+  roomImages roomImage[]
+  hotelBookings hotelBooking[]
+  @@id([hotelId, typeName])
+}
+
+model roomImage{
+  roomImageId String @id @default(cuid())
+  picture String
+  pictureId String @unique // Used for deleting the image from cloudinary
+  typeName String
+  hotelId String
+  roomType RoomType @relation(fields: [hotelId, typeName], references: [hotelId, typeName])
+}
+
+model flightBooking{ // For this model, most actual data is stored in AFS still, can lookup with bookingReference and lastName
+  flightBookingId String @id @default(cuid())
+  bookingReference String
+  userId String
+  lastName String
+  origin String
+  destination String
+  price Float
+  departureDate DateTime
+  ticketNumber String
+  user User @relation(fields: [userId], references: [userId])
+  status String
+}
+
+model flightTemp{
+  flightTempId String @id @default(cuid())
+  userId String
+  flightId String
+  origin String
+  destination String
+  price Float
+  departureDate DateTime
+  user User @relation(fields: [userId], references: [userId])
+}
+
+
+model hotelBooking{
+  userId String
+  roomId String
+  hotelId String
+  typeName String
+  status String
+  price Int
+  roomType RoomType @relation(fields: [hotelId, typeName], references: [hotelId, typeName])
+  user User @relation(fields: [userId], references: [userId])
+  room Room @relation(fields: [roomId], references: [roomId])
+  checkInDate DateTime
+  checkOutDate DateTime
+  @@id([userId, roomId, checkInDate, checkOutDate])
+}
+
+model Notifications{
+  notificationId String @id @default(cuid())
+  userId String
+  message String
+  isRead Boolean @default(false)
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [userId])
+}
+
+model City {
+  id       String @id @default(cuid())
+  name     String
+  country  String
+  airports Airport[]
+  @@unique ([name, country], name: "unique_city")
+}
+
+model Airport {
+  id      String @id  // Using Prisma's default UUID
+  code    String @unique
+  name    String
+  city    City @relation(fields: [cityId], references: [id])
+  cityId  String
+}
+
+model hotelTemp{
+  userId String
+  roomId String
+  checkInDate DateTime
+  checkOutDate DateTime
+  pricePerNight Float
+  typeName String
+  user User @relation(fields: [userId], references: [userId])
+  room Room @relation(fields: [roomId], references: [roomId])
+  @@id([userId, roomId, checkInDate, checkOutDate])
+}
+
+model deavtivated{
+  roomId String @id
+  hotelId String
+  typeName String
+  room Room @relation(fields: [roomId], references: [roomId])
+}
+
+model Invoice {
+  invoiceId           String   @id @default(uuid())
+  userId       String
+  createdAt    DateTime @default(now())
+  totalAmount  Float
+  flights      Json
+  hotels       Json
+  user         User     @relation(fields: [userId], references: [userId])
+}

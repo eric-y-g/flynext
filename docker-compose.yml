@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      context: ./309a1
+    container_name: travel-app
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/mydb
+      - ACCESS_TOKEN_SECRET=3f9c8a2e7b89f34a40d6a12db87c1c27d5e8e9e1a2c8b4f12d97e86f3c6b8a3d
+      - REFRESH_TOKEN_SECRET=97e5d8c6b1a3f4d2e9a7c8b4f6d3e1a29c7b8a4e5d6f3c2b1a8d9e7f4c6b3a1
+      - AFS_API_KEY=660fd2753857f40781e914d56c15606bd4389995d302afb3147ed497def73da1
+      - CLOUDINARY_CLOUD_NAME=dojcnbdss
+      - CLOUDINARY_API_KEY=539333924276267
+      - CLOUDINARY_API_SECRET=6ZB-0nADSQoYa4820wUZy7VKw-Q
+      - NEXT_PUBLIC_BASE_URL=http://localhost:3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:15
+    container_name: travel-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
